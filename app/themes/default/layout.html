@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="<%= assets.css %>" />
+    <script type="module" src="<%= assets.js %>"></script>
+  </head>
+  <body
+    data-controller="store"
+    class="min-h-screen bg-base-950 font-sans text-white antialiased"
+    style="background-image:
+      radial-gradient(900px 650px at 18% 0%, rgba(255, 59, 92, 0.12), transparent 62%),
+      radial-gradient(900px 650px at 82% 12%, rgba(242, 201, 76, 0.10), transparent 64%),
+      linear-gradient(0deg, rgba(255, 255, 255, 0.04), transparent 35%);"
+  >
+    <div class="mx-auto w-full max-w-5xl px-5 pb-20 pt-10">
+      <header
+        class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4"
+        data-testid="topbar"
+      >
+        <div class="flex items-center gap-4">
+          <a
+            href="/"
+            class="h-9 w-9 bg-gradient-to-br from-synth-yellow to-synth-red"
+            aria-label="Home"
+            data-testid="home-link"
+          ></a>
+          <div>
+            <a href="/" class="block" data-testid="brand-home-link">
+              <h1 class="text-base font-semibold tracking-tight hover:text-white" data-testid="brand-title">Blizzard</h1>
+            </a>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end" data-testid="header-right">
+          <div data-testid="connect-slot"></div>
+        </div>
+      </header>
+
+      <main class="mt-4" data-store-target="main">
+        <%- body %>
+      </main>
+
+      <footer class="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-4 text-xs text-white/55" data-testid="footer">
+        <div class="text-xs text-white/55" data-testid="footer-brand">
+          <a class="text-orange-500 hover:text-orange-400" href="/" data-testid="footer-blizzard">Blizzard</a>
+          <span class="text-white/35"> by </span>
+          <a class="text-orange-500 hover:text-orange-400" href="<%= CONFIG.footer_wizards_url %>" data-testid="footer-wizards" target="_blank" rel="noopener">The Wizards of Ord</a>
+        </div>
+        <div class="flex items-center gap-3" data-testid="social">
+          <a
+            class="text-white/55 hover:text-white"
+            href="<%= CONFIG.social_website_url %>"
+            aria-label="Website"
+            data-testid="social-website"
+            target="_blank"
+            rel="noopener"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9-9 4.03-9 9 4.03 9 9 9Z" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M3 12h18" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M12 3c2.4 2.5 3.6 5.5 3.6 9S14.4 18.5 12 21c-2.4-2.5-3.6-5.5-3.6-9S9.6 5.5 12 3Z" stroke="currentColor" stroke-width="1.6"/>
+            </svg>
+          </a>
+          <a
+            class="text-white/55 hover:text-white"
+            href="<%= CONFIG.social_x_url %>"
+            aria-label="X"
+            data-testid="social-x"
+            target="_blank"
+            rel="noopener"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M18.9 3H21l-4.8 5.5L22 21h-4.6l-3.6-5.3L9 21H7l5.2-6.1L2 3h4.7l3.2 4.7L13.9 3h5Z" fill="currentColor"/>
+            </svg>
+          </a>
+          <a
+            class="text-white/55 hover:text-white"
+            href="<%= CONFIG.social_github_url %>"
+            aria-label="GitHub"
+            data-testid="social-github"
+            target="_blank"
+            rel="noopener"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path fill="currentColor" d="M12 2c-5.52 0-10 4.58-10 10.23 0 4.52 2.87 8.35 6.84 9.7.5.1.68-.22.68-.5v-1.75c-2.78.62-3.37-1.22-3.37-1.22-.46-1.2-1.12-1.52-1.12-1.52-.92-.65.07-.64.07-.64 1.02.07 1.55 1.07 1.55 1.07.9 1.58 2.36 1.12 2.94.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.32.1-2.75 0 0 .84-.27 2.75 1.05A9.3 9.3 0 0 1 12 6.9c.85 0 1.7.12 2.5.34 1.9-1.32 2.74-1.05 2.74-1.05.56 1.43.21 2.49.1 2.75.64.72 1.03 1.63 1.03 2.75 0 3.94-2.35 4.8-4.58 5.05.36.32.68.95.68 1.92v2.86c0 .28.18.6.69.5A10.05 10.05 0 0 0 22 12.23C22 6.58 17.52 2 12 2Z"/>
+            </svg>
+          </a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@source "../../themes/**/*.html";
+@source "../../../app/assets/javascripts/**/*.js";
+
+@theme {
+  --color-base-950: #0B0C0F;
+  --color-base-900: #101218;
+  --color-base-850: #151822;
+  --color-synth-red: #FF3B5C;
+  --color-synth-yellow: #F2C94C;
+  --shadow-glow: 0 18px 60px rgba(0, 0, 0, 0.55);
+  --shadow-panel: 0 10px 30px rgba(0, 0, 0, 0.40);
+}

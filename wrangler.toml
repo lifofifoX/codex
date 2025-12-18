@@ -1,0 +1,14 @@
+name = "blizzard"
+main = "app/controllers/index.js"
+compatibility_date = "2025-12-17"
+assets = { directory = "public" }
+
+[[rules]]
+globs = ["**/*.html"]
+type = "Text"
+fallthrough = true
+
+[[rules]]
+globs = ["**/*.yml", "**/*.yaml"]
+type = "Text"
+fallthrough = true

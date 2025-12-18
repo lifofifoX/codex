@@ -1,0 +1,11 @@
+ord_api_base_url: ""
+theme: "default"
+page_size: 24
+store_address: ""
+price_sats: 10000
+estimated_vbytes: 180
+fee_rate_sat_vb_default: 10
+social_github_url: ""
+social_x_url: ""
+social_website_url: ""
+footer_wizards_url: ""

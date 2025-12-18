@@ -1,0 +1,105 @@
+<section class="pb-6" data-testid="inscription-page">
+  <h1 class="text-xl font-bold tracking-tight" data-testid="page-title"><%= title %></h1>
+  <div class="mt-2 font-mono text-[11px]" data-testid="inscription-meta">
+    <span data-testid="inscription-id"><%= inscription.id %></span>
+  </div>
+
+  <div class="mt-6 grid grid-cols-1 items-start gap-6 md:grid-cols-12">
+    <div class="md:col-span-7">
+      <div class="relative aspect-square win-inset bg-white" data-testid="media" data-controller="image">
+        <div
+          class="absolute inset-0 bg-[repeating-linear-gradient(45deg,#ddd_0px,#ddd_6px,#eee_6px,#eee_12px)]"
+          data-image-target="skeleton"
+        ></div>
+        <img
+          src="<%= inscription.mediaUrl %>"
+          alt="<%= title %>"
+          loading="eager"
+          decoding="async"
+          class="block h-full w-full object-contain opacity-0 transition-opacity duration-300"
+          data-image-target="img"
+          data-action="load->image#loaded error->image#error"
+          data-testid="inscription-media-img"
+        />
+      </div>
+    </div>
+
+    <aside class="md:col-span-5">
+      <div
+        class="win-border bg-[#e0e0e0] px-4 py-4"
+        data-testid="purchase-panel"
+        data-controller="checkout"
+        data-checkout-price-value="<%= checkout.priceSats %>"
+        data-checkout-vbytes-value="<%= checkout.estimatedVbytes %>"
+      >
+        <div class="flex items-baseline gap-2" data-testid="price-row">
+          <div class="text-3xl font-bold tracking-tight" data-testid="price-sats"><%= checkout.priceSatsFormatted %></div>
+          <div class="text-3xl font-bold tracking-tight">SATS</div>
+        </div>
+
+        <div class="mt-5 space-y-4" data-testid="fees">
+          <div>
+            <div class="flex items-baseline justify-between gap-3">
+              <div class="text-sm font-bold">Fee rate</div>
+              <div class="font-mono text-[11px]">sat/vB</div>
+            </div>
+            <div class="mt-2">
+              <input
+                class="win-inset w-full bg-white px-3 py-2 font-mono text-sm outline-none"
+                type="number"
+                inputmode="numeric"
+                name="fee_rate_sat_vb"
+                value="<%= checkout.feeRateDefault %>"
+                data-checkout-target="feeRate"
+                data-action="input->checkout#recalc"
+              />
+            </div>
+          </div>
+
+          <div class="space-y-2 text-sm">
+            <div class="flex items-baseline justify-between gap-3">
+              <div>Network fee</div>
+              <div class="font-mono text-sm"><span data-checkout-target="fee">0</span> SATS</div>
+            </div>
+            <div class="flex items-baseline justify-between gap-3">
+              <div class="font-bold">Total</div>
+              <div class="font-mono text-sm font-bold text-[#000080]"><span data-checkout-target="total">0</span> SATS</div>
+            </div>
+          </div>
+        </div>
+
+        <form class="mt-5" method="post" action="<%= buy.action %>" data-testid="buy-form">
+          <button
+            class="win-button w-full bg-[#e0e0e0] px-4 py-3 text-sm font-bold"
+            type="submit"
+            data-testid="buy-button"
+            data-action="click->store#buy"
+          >Buy now</button>
+        </form>
+
+        <div class="<%= buy.errorClass %> mt-4 win-inset bg-white px-3 py-3" data-testid="buy-error">
+          <div class="text-sm font-bold">Buy</div>
+          <div class="mt-2 font-mono text-[11px] leading-relaxed"><%= buy.error %></div>
+        </div>
+
+        <div class="mt-5 win-inset bg-white px-3 py-3" data-testid="details">
+          <div class="text-sm font-bold">Details</div>
+          <dl class="mt-3 space-y-2 text-sm">
+            <div class="flex items-baseline justify-between gap-4">
+              <dt>Inscription</dt>
+              <dd class="truncate font-mono text-[11px]"><%= inscription.id %></dd>
+            </div>
+            <div class="flex items-baseline justify-between gap-4">
+              <dt>Number</dt>
+              <dd class="font-mono text-[11px]"><%= inscription.number %></dd>
+            </div>
+            <div class="flex items-baseline justify-between gap-4">
+              <dt>Seller</dt>
+              <dd class="truncate font-mono text-[11px]"><%= CONFIG.store_address %></dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>

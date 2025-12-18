@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="<%= assets.css %>" />
+    <script type="module" src="<%= assets.js %>"></script>
+    <style>
+      :root { color-scheme: light; }
+      body { font-family: Tahoma, Verdana, Arial, system-ui, sans-serif; }
+      .win-border { border: 2px solid #000; box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #808080; }
+      .win-inset { border: 2px solid #000; box-shadow: inset -1px -1px 0 #fff, inset 1px 1px 0 #808080; }
+      .win-button { border: 2px solid #000; box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #808080; }
+      .win-button:active { box-shadow: inset -1px -1px 0 #fff, inset 1px 1px 0 #808080; }
+    </style>
+  </head>
+  <body
+    data-controller="store"
+    class="min-h-screen bg-[#c0c0c0] text-black antialiased"
+  >
+    <div class="mx-auto w-full max-w-5xl px-5 pb-20 pt-10">
+      <header
+        class="win-border flex flex-wrap items-center justify-between gap-4 bg-[#000080] px-4 py-3 text-white"
+        data-testid="topbar"
+      >
+        <div class="flex items-center gap-3">
+          <a
+            href="/"
+            class="h-8 w-8 bg-[#ff00ff]"
+            aria-label="Home"
+            data-testid="home-link"
+          ></a>
+          <a href="/" class="block" data-testid="brand-home-link">
+            <h1 class="text-sm font-bold tracking-tight" data-testid="brand-title">Blizzard</h1>
+          </a>
+        </div>
+
+        <div class="flex items-center justify-end" data-testid="header-right">
+          <div data-testid="connect-slot"></div>
+        </div>
+      </header>
+
+      <main class="mt-4" data-store-target="main">
+        <%- body %>
+      </main>
+
+      <footer class="mt-10 win-border bg-[#e0e0e0] px-4 py-3 text-xs text-black" data-testid="footer">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="text-xs" data-testid="footer-brand">
+            <a class="font-bold underline" href="/" data-testid="footer-blizzard">Blizzard</a>
+            <span> by </span>
+            <a class="font-bold underline" href="<%= CONFIG.footer_wizards_url %>" data-testid="footer-wizards" target="_blank" rel="noopener">The Wizards of Ord</a>
+          </div>
+          <div class="flex items-center gap-3" data-testid="social">
+            <a
+              class="underline"
+              href="<%= CONFIG.social_website_url %>"
+              aria-label="Website"
+              data-testid="social-website"
+              target="_blank"
+              rel="noopener"
+            >Web</a>
+            <a
+              class="underline"
+              href="<%= CONFIG.social_x_url %>"
+              aria-label="X"
+              data-testid="social-x"
+              target="_blank"
+              rel="noopener"
+            >X</a>
+            <a
+              class="underline"
+              href="<%= CONFIG.social_github_url %>"
+              aria-label="GitHub"
+              data-testid="social-github"
+              target="_blank"
+              rel="noopener"
+            >GitHub</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

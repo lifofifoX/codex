@@ -1,0 +1,28 @@
+{
+  "name": "blizzard",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:templates": "node scripts/build-templates.js",
+    "build": "esbuild app/assets/javascripts/application.js --bundle --sourcemap --format=esm --outdir=public --public-path=/ --entry-names=[name]-[hash] --metafile=scripts/meta.json",
+    "build:manifest": "node scripts/build-manifest.js",
+    "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./public/application.css --minify",
+    "predev": "npm run build && npm run build:css && npm run build:manifest && npm run build:templates",
+    "dev": "wrangler dev",
+    "predeploy": "npm run build && npm run build:css && npm run build:manifest && npm run build:templates",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "@hotwired/stimulus": "*",
+    "@hotwired/turbo": "*",
+    "hono": "*",
+    "yaml": "*"
+  },
+  "devDependencies": {
+    "ejs": "*",
+    "esbuild": "*",
+    "@tailwindcss/cli": "*",
+    "tailwindcss": "*",
+    "wrangler": "*"
+  }
+}

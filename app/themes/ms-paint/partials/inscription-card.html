@@ -1,0 +1,32 @@
+<a
+  class="win-border group block bg-[#e0e0e0] text-black"
+  href="<%= item.link %>"
+  data-testid="inscription-card"
+  data-inscription-id="<%= item.id %>"
+>
+  <div class="relative aspect-square win-inset bg-white" data-controller="image">
+    <div
+      class="absolute inset-0 bg-[repeating-linear-gradient(45deg,#ddd_0px,#ddd_6px,#eee_6px,#eee_12px)]"
+      data-image-target="skeleton"
+    ></div>
+    <img
+      src="<%= item.thumbnailUrl %>"
+      alt="<%= item.title %>"
+      loading="lazy"
+      decoding="async"
+      class="block h-full w-full object-cover opacity-0 transition-opacity duration-300"
+      data-image-target="img"
+      data-action="load->image#loaded error->image#error"
+      data-testid="inscription-thumb"
+    />
+  </div>
+  <div class="px-3 py-3">
+    <div class="flex items-start justify-between gap-3">
+      <div class="min-w-0">
+        <div class="truncate text-sm font-bold leading-snug tracking-tight" data-testid="inscription-title"><%= item.title %></div>
+      </div>
+      <div class="shrink-0 font-mono text-[11px]" data-testid="inscription-number"><%= item.number %></div>
+    </div>
+    <div class="mt-2 truncate font-mono text-[11px]" data-testid="inscription-id"><%= item.id %></div>
+  </div>
+</a>

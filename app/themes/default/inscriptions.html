@@ -1,0 +1,28 @@
+<section class="pb-6" data-testid="inscriptions-page">
+  <h2 class="sr-only" data-testid="page-title">Store</h2>
+
+  <div>
+    <div data-testid="grid" class="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4">
+      <%- storefront.itemsHtml %>
+    </div>
+
+    <div class="mt-8 flex items-center justify-between gap-3" data-testid="pagination">
+      <a
+        class="<%= pagination.prevClass %>"
+        href="<%= pagination.prevUrl %>"
+        data-testid="prev-page"
+        data-action="click->store#paginate"
+      >Prev</a>
+      <div class="flex items-center gap-2 border border-white/10 bg-white/[0.03] px-3 py-2 font-mono text-xs text-white/60" data-testid="cursor-pill">
+        <strong class="font-semibold text-white/70">Page</strong>
+        <span data-store-target="cursor"><%= pagination.cursor %></span>
+      </div>
+      <a
+        class="<%= pagination.nextClass %>"
+        href="<%= pagination.nextUrl %>"
+        data-testid="next-page"
+        data-action="click->store#paginate"
+      >Next</a>
+    </div>
+  </div>
+</section>
