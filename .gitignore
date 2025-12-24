@@ -43,6 +43,8 @@
 
 .DS_Store
 
+.dev.vars
+
 dist/
 generated/
 .wrangler/
@@ -51,3 +53,5 @@ public/assets/
 public/*.css
 public/*.js
 public/*.js.map
+
+scripts/meta.json

@@ -1,0 +1,52 @@
+<div class="border border-white/10 bg-white/[0.03] px-5 py-5" data-testid="order-panel">
+  <% const headerClass = order.status === 'pending' ? 'border-orange-500/35 bg-orange-500/10 text-orange-400' : 'border-emerald-400/25 bg-emerald-400/10 text-emerald-200' %>
+  <div class="border px-4 py-3 <%= headerClass %>" data-testid="order-banner">
+    <div class="text-sm font-semibold tracking-tight"><%= order.status === 'pending' ? 'This inscription purchase is pending' : 'This inscription has sold' %></div>
+  </div>
+  <dl class="mt-4 space-y-3 text-white/70" data-testid="order-details">
+    <% const statusClass = order.status === 'pending' ? 'text-orange-400' : (order.status === 'confirmed' ? 'text-emerald-300' : 'text-content') %>
+    <div>
+      <dt class="text-[11px] font-semibold tracking-wide text-white/45">Status</dt>
+      <dd class="mt-1 text-sm font-semibold <%= statusClass %>"><%= order.status %></dd>
+    </div>
+    <div>
+      <dt class="text-[11px] font-semibold tracking-wide text-white/45">Price</dt>
+      <dd class="mt-1 font-mono text-sm font-semibold text-orange-500"><%= formatSats(order.price_sats) %></dd>
+    </div>
+    <div>
+      <dt class="text-[11px] font-semibold tracking-wide text-white/45">Buyer</dt>
+      <dd class="mt-1 font-mono text-xs text-content break-all"><%= order.buyer_address %></dd>
+    </div>
+    <div>
+      <dt class="text-[11px] font-semibold tracking-wide text-white/45">Transaction</dt>
+      <dd class="mt-1">
+        <a class="block font-mono text-xs text-orange-500 no-underline hover:text-orange-400 break-all" target="_blank" rel="noopener" href="https://mempool.space/tx/<%= order.txid %>"><%= order.txid %></a>
+      </dd>
+    </div>
+    <% if (order.created_at) { %>
+      <% const createdIso = new Date(order.created_at * 1000).toISOString() %>
+      <% const createdHuman = new Date(order.created_at * 1000).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }) %>
+      <div>
+        <dt class="text-[11px] font-semibold tracking-wide text-white/45">Created</dt>
+        <dd class="mt-1 font-mono text-xs text-content"><time datetime="<%= createdIso %>"><%= createdHuman %></time></dd>
+      </div>
+    <% } %>
+  </dl>
+
+  <% const extra = JSON.parse(order.extra_details || '{}') %>
+  <% const optionalPayments = extra.optional_payments || [] %>
+  <% if (optionalPayments.length > 0) { %>
+    <div class="mt-4 border-t border-white/10 pt-4" data-testid="order-optional-payments">
+      <div class="text-xs font-semibold tracking-wide text-white/60">Include additional payments</div>
+      <dl class="mt-3 space-y-2">
+        <% optionalPayments.forEach((p) => { %>
+          <div class="flex items-baseline justify-between gap-3 border border-white/10 bg-white/[0.02] px-3 py-2">
+            <dt class="min-w-0 truncate text-sm font-semibold text-indigo-400"><%= p.title %></dt>
+            <dd class="shrink-0 font-mono text-xs text-orange-500"><%= formatSats(p.amount) %></dd>
+          </div>
+        <% }) %>
+      </dl>
+    </div>
+  <% } %>
+</div>
+

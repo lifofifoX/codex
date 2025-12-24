@@ -1,11 +1,11 @@
-ord_api_base_url: ""
+ord_api_url: "https://charlie.ordinals.net"
+electrs_api_url: "https://btc-1.xverse.app"
+mempool_space_api_url: "https://memproxy.inscribe.dev/api"
 theme: "default"
 page_size: 24
-store_address: ""
-price_sats: 10000
-estimated_vbytes: 180
-fee_rate_sat_vb_default: 10
-social_github_url: ""
-social_x_url: ""
-social_website_url: ""
-footer_wizards_url: ""
+artist_name: "lifofifo"
+artist_avatar_url: "https://pbs.twimg.com/profile_images/1670101521751580672/cq7bMIwk_400x400.jpg"
+artist_about: "lifofifo is an experienced tech professional with a deep interest in crypto and generative art. He is also the creator of OrdRain, the first generative art collection to use recursion techniques on Ordinals."
+social_github_url: "https://github.com/lifofifoX"
+social_x_url: "https://x.com/lifofifo"
+social_website_url: "https://wizards.art"

@@ -1,5 +1,6 @@
-import { readFile, mkdir, writeFile, copyFile, unlink } from 'node:fs/promises'
+import { readFile, mkdir, writeFile, unlink, copyFile } from 'node:fs/promises'
 import path from 'node:path'
+import { parse } from 'yaml'
 import { createHash } from 'node:crypto'
 
 const root = process.cwd()
@@ -19,6 +20,13 @@ async function main() {
 
   if (!js) throw new Error('Could not find entry output for app/assets/javascripts/application.js in meta.json')
 
+  const storeYaml = await readFile(path.join(root, 'config', 'store.yml'), 'utf8')
+  const config = parse(storeYaml)
+  const theme = config.theme
+
+  const themeCssEntry = path.join(root, 'app', 'assets', 'stylesheets', `application.${theme}.tailwind.css`)
+  await readFile(themeCssEntry)
+
   const cssIn = path.join(root, 'public', 'application.css')
   const cssBuf = await readFile(cssIn)
   const cssHash = createHash('sha256').update(cssBuf).digest('hex').slice(0, 10)
@@ -29,7 +37,8 @@ async function main() {
 
   const assets = {
     js,
-    css: `/${cssOutName}`
+    css: `/${cssOutName}`,
+    theme
   }
 
   const outDir = path.join(root, 'generated')

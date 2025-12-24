@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@source "../../themes/**/*.html";
+@source "../../../app/assets/javascripts/**/*.js";
+
+@theme {
+  --color-base-950: #0B0C0F;
+  --color-base-900: #101218;
+  --color-base-850: #151822;
+  --color-synth-red: #FF3B5C;
+  --color-synth-yellow: #F2C94C;
+  --shadow-glow: 0 18px 60px rgba(0, 0, 0, 0.55);
+  --shadow-panel: 0 10px 30px rgba(0, 0, 0, 0.40);
+}
+
+body .show-on-connected { display: none; }
+body.connected .hide-on-connected { display: none; }
+body.connected .show-on-connected { display: inline-flex; }
+
+.text-content { color: rgba(255, 255, 255, 0.85); }
+
+.ord-dot { display: inline-block; line-height: 1; position: relative; top: -1px; }
+
+.button-spinner { display: inline-flex; height: 1rem; width: 1rem; flex-shrink: 0; border-radius: 9999px; border: 2px solid currentColor; border-right-color: transparent; animation: spin 1s linear infinite; }
+.button-spinner-hidden { visibility: hidden; }
+
+.purchase-success { border-color: rgba(255, 255, 255, 0.10); background-color: rgba(255, 255, 255, 0.02); color: rgba(255, 255, 255, 0.55); cursor: default; }
+

@@ -1,0 +1,108 @@
+<section class="pb-6" data-testid="home-page">
+  <div data-testid="about">
+    <div class="w-full rounded-xl border border-white/10 bg-base-950/40 px-4 py-4 text-white/90 shadow-panel backdrop-blur-sm md:px-5 md:py-5">
+      <div class="text-sm leading-relaxed md:text-[15px]" data-testid="artist-about"><%= artist.about %></div>
+      <div class="mt-3 flex flex-wrap items-center gap-2" data-testid="artist-social">
+        <% if (artist.socials.websiteUrl) { %>
+          <a
+            class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-synth-yellow transition hover:bg-white/[0.06]"
+            href="<%= artist.socials.websiteUrl %>"
+            target="_blank"
+            rel="noopener"
+            data-testid="artist-social-website"
+            aria-label="Website"
+          >
+            <span aria-hidden="true">🌐</span>
+          </a>
+        <% } %>
+        <% if (artist.socials.xUrl) { %>
+          <a
+            class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-white transition hover:bg-white/[0.06]"
+            href="<%= artist.socials.xUrl %>"
+            target="_blank"
+            rel="noopener"
+            data-testid="artist-social-x"
+            aria-label="X"
+          >
+            <span aria-hidden="true">𝕏</span>
+          </a>
+        <% } %>
+        <% if (artist.socials.githubUrl) { %>
+          <a
+            class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-synth-red transition hover:bg-white/[0.06]"
+            href="<%= artist.socials.githubUrl %>"
+            target="_blank"
+            rel="noopener"
+            data-testid="artist-social-github"
+            aria-label="GitHub"
+          >
+            <span aria-hidden="true">🐙</span>
+          </a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6" data-testid="collections">
+    <div class="flex items-baseline justify-between gap-3">
+      <h2 class="text-sm font-semibold tracking-tight text-content" data-testid="collections-title">Collections</h2>
+    </div>
+
+    <div class="mt-4 grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4" data-testid="collections-grid">
+      <% (collections ?? []).forEach((collection) => { %>
+        <a
+          class="group block border border-white/10 bg-white/[0.02] shadow-panel transition hover:border-white/20 hover:bg-white/[0.035]"
+          href="/<%= encodeURIComponent(collection.slug) %>"
+          data-testid="collection-card"
+          data-collection-slug="<%= collection.slug %>"
+        >
+          <div class="relative aspect-square border-b border-white/10 bg-white/[0.02]" data-controller="image">
+            <div
+              class="absolute inset-0 animate-pulse bg-gradient-to-br from-white/[0.03] via-white/[0.06] to-white/[0.02]"
+              data-image-target="skeleton"
+            ></div>
+            <% if (collection.thumbnail.isImage) { %>
+              <img
+                src="<%= collection.thumbnail.contentUrl %>"
+                alt="<%= collection.title %>"
+                loading="lazy"
+                decoding="async"
+                style="image-rendering: pixelated"
+                class="block h-full w-full object-cover opacity-0 transition-opacity duration-300"
+                data-image-target="img"
+                data-action="load->image#loaded error->image#error"
+                data-testid="collection-thumb"
+              />
+            <% } else { %>
+              <iframe
+                src="<%= collection.thumbnail.previewUrl %>"
+                class="block h-full w-full border-0 pointer-events-none opacity-0 transition-opacity duration-300"
+                loading="lazy"
+                allow="accelerometer; gyroscope"
+                data-image-target="media"
+                data-action="load->image#loaded error->image#error"
+                data-testid="collection-thumb"
+              ></iframe>
+            <% } %>
+          </div>
+          <div class="p-4">
+            <div class="flex min-w-0 items-center gap-2" data-testid="collection-title">
+              <span class="min-w-0 truncate text-base font-semibold leading-snug tracking-tight text-white/95"><%= collection.title %></span>
+              <% if (collection.hasParent) { %>
+                <span class="shrink-0" data-testid="collection-parent-icon" aria-label="Parent collection">🧬</span>
+              <% } %>
+            </div>
+            <div class="mt-2 flex items-center gap-3">
+              <div class="font-mono text-xs text-orange-500" data-testid="collection-price"><%= formatSats(collection.priceSats) %></div>
+              <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-2 py-1 text-[11px] font-mono text-white/75" data-testid="collection-available">
+                <span class="ord-dot text-white/50" aria-hidden="true">◉</span>
+                <span class="text-white/90"><%= collection.availableCount %></span>
+              </div>
+            </div>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+

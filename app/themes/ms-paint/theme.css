@@ -1,0 +1,24 @@
+.theme-ms-paint { color-scheme: light; font-family: Tahoma, Verdana, Arial, system-ui, sans-serif; }
+
+.theme-ms-paint .win-border { border: 2px solid #000; box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #808080; }
+.theme-ms-paint .win-inset { border: 2px solid #000; box-shadow: inset -1px -1px 0 #fff, inset 1px 1px 0 #808080; }
+.theme-ms-paint .win-button { border: 2px solid #000; box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #808080; }
+.theme-ms-paint .win-button:active { box-shadow: inset -1px -1px 0 #fff, inset 1px 1px 0 #808080; }
+
+.theme-ms-paint .bg-win-bg { background-color: #c0c0c0; }
+.theme-ms-paint .bg-win-surface { background-color: #e0e0e0; }
+.theme-ms-paint .bg-win-blue { background-color: #000080; }
+
+.theme-ms-paint .text-win-black { color: #000; }
+.theme-ms-paint .text-win-white { color: #fff; }
+.theme-ms-paint .text-win-blue { color: #000080; }
+.theme-ms-paint .text-win-maroon { color: #800000; }
+.theme-ms-paint .text-win-green { color: #008000; }
+.theme-ms-paint .text-win-gray { color: #666; }
+.theme-ms-paint .text-win-orange { color: #ff7a00; }
+
+.theme-ms-paint .border-win-green { border-color: #008000; }
+.theme-ms-paint .border-win-orange { border-color: #ff7a00; }
+
+.theme-ms-paint .win-skeleton { background: repeating-linear-gradient(45deg, #ddd 0px, #ddd 6px, #eee 6px, #eee 12px); }
+

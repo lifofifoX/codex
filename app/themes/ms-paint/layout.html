@@ -6,38 +6,89 @@
     <title><%= title %></title>
     <link rel="stylesheet" href="<%= assets.css %>" />
     <script type="module" src="<%= assets.js %>"></script>
-    <style>
-      :root { color-scheme: light; }
-      body { font-family: Tahoma, Verdana, Arial, system-ui, sans-serif; }
-      .win-border { border: 2px solid #000; box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #808080; }
-      .win-inset { border: 2px solid #000; box-shadow: inset -1px -1px 0 #fff, inset 1px 1px 0 #808080; }
-      .win-button { border: 2px solid #000; box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #808080; }
-      .win-button:active { box-shadow: inset -1px -1px 0 #fff, inset 1px 1px 0 #808080; }
-    </style>
   </head>
   <body
-    data-controller="store"
-    class="min-h-screen bg-[#c0c0c0] text-black antialiased"
+    data-controller="store body-class usd"
+    data-action="wallet:connected@window->body-class#setConnected wallet:disconnected@window->body-class#setDisconnected"
+    class="theme-ms-paint min-h-screen bg-win-bg text-win-black antialiased"
   >
     <div class="mx-auto w-full max-w-5xl px-5 pb-20 pt-10">
       <header
-        class="win-border flex flex-wrap items-center justify-between gap-4 bg-[#000080] px-4 py-3 text-white"
+        class="win-border relative z-20 flex items-center justify-between gap-4 bg-win-blue px-4 py-3 text-win-white"
         data-testid="topbar"
       >
-        <div class="flex items-center gap-3">
+        <div class="flex min-w-0 items-center gap-3">
           <a
             href="/"
-            class="h-8 w-8 bg-[#ff00ff]"
+            class="win-inset h-10 w-10 overflow-hidden bg-white"
             aria-label="Home"
             data-testid="home-link"
-          ></a>
-          <a href="/" class="block" data-testid="brand-home-link">
-            <h1 class="text-sm font-bold tracking-tight" data-testid="brand-title">Blizzard</h1>
+          >
+            <img src="<%= CONFIG.artist_avatar_url %>" alt="" class="block h-full w-full object-cover" />
+          </a>
+          <a href="/" class="block min-w-0" data-testid="brand-home-link">
+            <h1 class="truncate text-sm font-bold tracking-tight" data-testid="brand-title"><%= CONFIG.artist_name %></h1>
           </a>
         </div>
 
-        <div class="flex items-center justify-end" data-testid="header-right">
-          <div data-testid="connect-slot"></div>
+        <nav class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-3 text-xs font-bold md:flex" data-testid="header-nav">
+          <a class="underline" href="/" data-testid="nav-home">Home</a>
+          <a class="underline" href="/activity" data-testid="nav-activity">Activity</a>
+          <a class="underline" href="/policy" data-testid="nav-policy">Policy</a>
+        </nav>
+
+        <div class="flex items-center justify-end gap-3" data-testid="header-right">
+          <div data-controller="wallet" data-testid="connect-slot" data-action="keydown.esc@window->wallet#close mouseup@document->wallet#closeIfClickedOutside" class="text-win-black">
+            <div
+              data-wallet-target="selector"
+              class="fixed bottom-0 right-0 z-40 w-full win-border bg-win-surface text-win-black transition-transform duration-200 ease-in-out translate-y-full data-[state=open]:translate-y-0 md:top-0 md:h-screen md:w-96 md:translate-y-0 md:translate-x-full md:data-[state=open]:translate-x-0"
+              data-state="closed"
+            >
+              <div class="p-4">
+                <div class="flex items-center justify-between gap-3">
+                  <div class="text-sm font-bold">Connect wallet</div>
+                  <button class="win-button bg-win-surface px-3 py-1 text-[11px] font-bold text-win-black" type="button" data-action="wallet#close">X</button>
+                </div>
+                <div class="mt-3 space-y-2">
+                  <button class="win-button flex w-full items-center justify-center gap-2 bg-win-surface px-4 py-3 text-sm font-bold text-win-black" data-wallet-target="xverse" data-action="wallet#authorize:prevent" data-wallet-provider-param="xverse">
+                    <img src="/wallets/xverse.svg" class="h-4 w-4" alt="" />
+                    <span>Xverse</span>
+                  </button>
+                  <button class="win-button flex w-full items-center justify-center gap-2 bg-win-surface px-4 py-3 text-sm font-bold text-win-black" data-wallet-target="unisat" data-action="wallet#authorize:prevent" data-wallet-provider-param="unisat">
+                    <img src="/wallets/unisat.png" class="h-5 w-5" alt="" />
+                    <span>Unisat</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="hide-on-connected">
+              <button class="win-button bg-win-surface px-4 py-2 text-xs font-bold text-win-black" data-action="wallet#select">Connect</button>
+            </div>
+
+            <div class="show-on-connected">
+              <div class="relative inline-flex" data-controller="dropdown" data-action="mouseup@window->dropdown#hide">
+                <button class="win-button bg-win-surface px-4 py-2 text-xs font-bold text-win-black" data-action="dropdown#toggle"><span data-wallet-target="addressPreview"></span> ▾</button>
+                <div class="absolute right-0 top-full z-50 mt-1 hidden w-40 win-border bg-win-surface p-1" data-dropdown-target="menu">
+                  <a class="block bg-win-surface px-3 py-2 text-xs font-bold underline text-win-black" href="#" data-action="wallet#logout:prevent dropdown#toggle">Disconnect</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="relative md:hidden" data-controller="dropdown" data-action="mouseup@window->dropdown#hide" data-testid="nav-menu">
+            <button class="win-button flex h-9 w-9 items-center justify-center bg-win-surface text-win-black" type="button" aria-label="Menu" data-action="dropdown#toggle" data-testid="nav-menu-button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 7h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4 12h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <div class="absolute right-0 top-full z-50 mt-1 hidden w-40 win-border bg-win-surface p-1 text-win-black" data-dropdown-target="menu" data-testid="nav-menu-list">
+              <a class="block bg-win-surface px-3 py-2 text-xs font-bold underline" href="/" data-testid="nav-menu-home">Home</a>
+              <a class="block bg-win-surface px-3 py-2 text-xs font-bold underline" href="/activity" data-testid="nav-menu-activity">Activity</a>
+              <a class="block bg-win-surface px-3 py-2 text-xs font-bold underline" href="/policy" data-testid="nav-menu-policy">Policy</a>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -45,38 +96,39 @@
         <%- body %>
       </main>
 
-      <footer class="mt-10 win-border bg-[#e0e0e0] px-4 py-3 text-xs text-black" data-testid="footer">
+      <footer class="mt-10 win-border bg-win-surface px-4 py-3 text-xs text-win-black" data-testid="footer">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div class="text-xs" data-testid="footer-brand">
-            <a class="font-bold underline" href="/" data-testid="footer-blizzard">Blizzard</a>
-            <span> by </span>
-            <a class="font-bold underline" href="<%= CONFIG.footer_wizards_url %>" data-testid="footer-wizards" target="_blank" rel="noopener">The Wizards of Ord</a>
+            <span>Powered by </span>
+            <a class="font-bold underline" href="https://github.com/lifofifoX/codex" data-testid="footer-blizzard" target="_blank" rel="noopener">CODEX</a>
+            <span> from </span>
+            <a class="font-bold underline" href="https://wizards.art/" data-testid="footer-wizards" target="_blank" rel="noopener">The Wizards of Ord</a>
           </div>
           <div class="flex items-center gap-3" data-testid="social">
             <a
-              class="underline"
-              href="<%= CONFIG.social_website_url %>"
+              class="inline-flex h-8 w-8 items-center justify-center"
+              href="https://wizards.art/"
               aria-label="Website"
               data-testid="social-website"
               target="_blank"
               rel="noopener"
-            >Web</a>
+            ><span aria-hidden="true">🌐</span></a>
             <a
-              class="underline"
-              href="<%= CONFIG.social_x_url %>"
+              class="inline-flex h-8 w-8 items-center justify-center"
+              href="https://x.com/TheWizardsOfOrd"
               aria-label="X"
               data-testid="social-x"
               target="_blank"
               rel="noopener"
-            >X</a>
+            ><span aria-hidden="true">𝕏</span></a>
             <a
-              class="underline"
-              href="<%= CONFIG.social_github_url %>"
+              class="inline-flex h-8 w-8 items-center justify-center"
+              href="https://github.com/TheWizardsOfOrd"
               aria-label="GitHub"
               data-testid="social-github"
               target="_blank"
               rel="noopener"
-            >GitHub</a>
+            ><span aria-hidden="true">🐙</span></a>
           </div>
         </div>
       </footer>

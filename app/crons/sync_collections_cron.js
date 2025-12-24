@@ -1,0 +1,61 @@
+import { OrdinalsAPI } from '../models/ordinals_api.js'
+import { POLICY } from '../config.js'
+import { StoreWallet } from '../models/store_wallet.js'
+import { Collection } from '../models/collection.js'
+import { ensureInscriptionMetadata, refreshInscriptionMetadata, setCollectionAvailableIds } from '../models/db/inscriptions.js'
+
+function uniq(arr) {
+  return Array.from(new Set(arr))
+}
+
+function computeAvailableIds({ ownedIds, metadataById, collection }) {
+  if (collection.inscription_ids) {
+    const eligibleIds = uniq(collection.inscription_ids)
+    return eligibleIds.filter((id) => ownedIds.includes(id))
+  }
+
+  if (collection.parent_inscription_id) {
+    const out = []
+
+    for (const inscriptionId of ownedIds) {
+      const metadata = metadataById.get(inscriptionId)
+      if ((metadata.parents ?? []).includes(collection.parent_inscription_id)) out.push(inscriptionId)
+    }
+
+    return uniq(out)
+  }
+
+  return []
+}
+
+export async function syncCollections({ env }) {
+  const db = env.DB
+  const syncRunId = Math.floor(Date.now() / 1000)
+
+  const storeWalletTaprootAddress = StoreWallet.fromEnv(env).taprootAddress
+  const ownedIds = await OrdinalsAPI.findInscriptionsByAddress(storeWalletTaprootAddress)
+
+  const collectionSlugs = uniq(POLICY.selling.map((c) => c.slug))
+
+  const metadataInscriptionIds = uniq(POLICY.selling.map((c) => new Collection({ policy: c }).metadataInscriptionId))
+  await refreshInscriptionMetadata({ db, inscriptionIds: metadataInscriptionIds })
+
+  const metadataById = await ensureInscriptionMetadata({ db, inscriptionIds: uniq([...metadataInscriptionIds, ...ownedIds]) })
+
+  for (const collection of POLICY.selling) {
+    const availableIds = computeAvailableIds({ ownedIds, metadataById, collection })
+    await setCollectionAvailableIds({ db, collectionSlug: collection.slug, availableIds, syncRunId, metadataById })
+  }
+
+  if (collectionSlugs.length === 0) {
+    await db.prepare('DELETE FROM collection_inscriptions').run()
+    return
+  }
+
+  const placeholders = collectionSlugs.map((_, i) => `?${i + 1}`).join(', ')
+  await db.prepare(`DELETE FROM collection_inscriptions WHERE collection_slug NOT IN (${placeholders})`).bind(...collectionSlugs).run()
+}
+
+export function runSyncCollectionsCron(event, env, ctx) {
+  ctx.waitUntil(syncCollections({ env }))
+}

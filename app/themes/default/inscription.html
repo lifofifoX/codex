@@ -1,106 +1,261 @@
-<section class="pb-6" data-testid="inscription-page">
-  <h1 class="text-2xl font-semibold tracking-tight text-white/95" data-testid="page-title"><%= title %></h1>
-  <div class="mt-3 font-mono text-xs text-white/55" data-testid="inscription-meta">
-    <span data-testid="inscription-id"><%= inscription.id %></span>
+<section
+  class="pb-6"
+  data-testid="inscription-page"
+  data-controller="inscription"
+  data-action="wallet:connected@window->inscription#onWalletConnected wallet:disconnected@window->inscription#onWalletDisconnected"
+  data-inscription-price-value="<%= checkout.priceSats %>"
+  data-inscription-inscription-metadata-value="<%= JSON.stringify(inscription.metadata) %>"
+  data-inscription-payment-address-value="<%= config.payment_address %>"
+>
+  <% if (config.parent_inscription_id) { %>
+    <div class="mb-4 overflow-hidden border border-white/10 bg-base-950/40 shadow-panel backdrop-blur-sm" data-testid="parent-banner">
+      <div class="flex items-stretch">
+        <a
+          class="block w-24 shrink-0 overflow-hidden border-r border-white/10 bg-white/[0.02]"
+          href="/<%= encodeURIComponent(config.slug) %>"
+          data-testid="parent-thumb-link"
+        >
+          <img
+            src="https://ordinals.com/content/<%= encodeURIComponent(config.parent_inscription_id) %>"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            style="image-rendering: pixelated"
+            class="block h-full w-full object-cover"
+            data-testid="parent-thumb"
+          />
+        </a>
+        <div class="min-w-0 px-5 py-4" data-testid="parent-meta">
+          <div class="flex min-w-0 items-center justify-between gap-4" data-testid="parent-title-row">
+            <a
+              class="min-w-0 truncate text-[15px] font-semibold tracking-tight text-content hover:text-white"
+              href="/<%= encodeURIComponent(config.slug) %>"
+              data-testid="parent-collection-link"
+            ><%= config.title %></a>
+            <a
+              class="shrink-0 inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.03] px-2 py-1 font-mono text-xs leading-none text-white/75 hover:border-white/20 hover:bg-white/[0.05] hover:text-white"
+              href="https://ordinals.com/inscription/<%= encodeURIComponent(config.parent_inscription_id) %>"
+              target="_blank"
+              rel="noopener"
+              data-testid="parent-ordinals-number-link"
+            ><span class="leading-none">#<%= parentInscription.number %></span><span class="ord-dot" aria-hidden="true">◉</span></a>
+          </div>
+          <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-white/60" data-testid="parent-info">
+            <span class="inline-flex items-center gap-2 rounded-full border border-synth-red/35 bg-synth-red/10 px-2 py-1 text-synth-red" data-testid="parent-children" data-tooltip="On-chain parent child provenance" title="On-chain parent child provenance">
+              <span aria-hidden="true">🧬</span>
+              <span class="font-mono text-content"><%= new Intl.NumberFormat('en-US').format(parentInscription.childCount) %></span>
+            </span>
+            <% if (parentInscription.isSealed) { %>
+              <span class="inline-flex items-center gap-2 rounded-full border border-orange-500/30 bg-orange-500/10 px-2 py-1 font-semibold text-orange-400" data-testid="parent-sealed" data-tooltip="The parent inscription owner cannot create more children" title="The parent inscription owner cannot create more children"><span aria-hidden="true">🔥</span><span class="uppercase tracking-wide">Sealed</span></span>
+            <% } else { %>
+              <span class="inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-2 py-1 font-semibold text-emerald-300" data-testid="parent-unsealed" data-tooltip="The parent inscription owner can create more children" title="The parent inscription owner can create more children"><span aria-hidden="true">🔓</span><span class="uppercase tracking-wide">Unsealed</span></span>
+            <% } %>
+          </div>
+        </div>
+      </div>
   </div>
-
-  <div class="mt-6 grid grid-cols-1 items-start gap-8 md:grid-cols-12">
-    <div class="md:col-span-7">
-      <div class="relative aspect-square border border-white/10 bg-white/[0.02]" data-testid="media" data-controller="image">
+  <% } %>
+  <div class="mb-0">
+    <h1 class="truncate text-lg font-semibold tracking-tight text-content" data-testid="page-title"><%= title %></h1>
+  </div>
+  <div class="mt-4 grid grid-cols-1 items-start gap-6 md:flex md:items-stretch">
+    <div class="md:flex-1">
+      <div class="relative aspect-square border border-white/10 bg-white/[0.02] md:aspect-auto md:h-full" data-testid="media" data-controller="image">
         <div
           class="absolute inset-0 animate-pulse bg-gradient-to-br from-white/[0.03] via-white/[0.06] to-white/[0.02]"
           data-image-target="skeleton"
         ></div>
+        <% if (inscription.isImage) { %>
         <img
-          src="<%= inscription.mediaUrl %>"
+            src="<%= inscription.contentUrl %>"
           alt="<%= title %>"
           loading="eager"
           decoding="async"
+            style="image-rendering: pixelated"
           class="block h-full w-full object-contain opacity-0 transition-opacity duration-300"
           data-image-target="img"
           data-action="load->image#loaded error->image#error"
           data-testid="inscription-media-img"
         />
+        <% } else { %>
+          <iframe
+            src="<%= inscription.previewUrl %>"
+            class="block h-full w-full border-0 pointer-events-none opacity-0 transition-opacity duration-300"
+            allow="accelerometer; gyroscope"
+            data-image-target="media"
+            data-action="load->image#loaded error->image#error"
+            data-testid="inscription-media-iframe"
+          ></iframe>
+        <% } %>
       </div>
-
     </div>
-
-    <aside class="md:col-span-5">
-      <div
-        class="border border-white/10 bg-white/[0.03] px-5 py-5"
-        data-testid="purchase-panel"
-        data-controller="checkout"
-        data-checkout-price-value="<%= checkout.priceSats %>"
-        data-checkout-vbytes-value="<%= checkout.estimatedVbytes %>"
-      >
-        <div class="flex items-baseline gap-2" data-testid="price-row">
-          <div class="text-4xl font-semibold tracking-tight text-white/95" data-testid="price-sats"><%= checkout.priceSatsFormatted %></div>
-          <div class="text-4xl font-semibold tracking-tight text-white/55">SATS</div>
-        </div>
-
-        <div class="mt-6 space-y-4" data-testid="fees">
-          <div>
-            <div class="flex items-baseline justify-between gap-3">
-              <div class="text-sm font-semibold text-white/75">Fee rate</div>
-              <div class="font-mono text-xs text-white/55">sat/vB</div>
-            </div>
-            <div class="mt-2">
-              <input
-                class="w-full appearance-none border border-white/10 bg-white/[0.02] px-3 py-2 font-mono text-sm text-white/85 outline-none focus:border-white/20 focus:outline-none focus:ring-0"
-                type="number"
-                inputmode="numeric"
-                name="fee_rate_sat_vb"
-                value="<%= checkout.feeRateDefault %>"
-                data-checkout-target="feeRate"
-                data-action="input->checkout#recalc"
-              />
-            </div>
+    <aside class="md:flex-1">
+      <div class="border border-white/10 bg-white/[0.03] px-5 py-5" data-testid="details">
+        <dl class="grid grid-cols-1 gap-4 text-sm" data-testid="details-grid">
+          <div data-testid="detail-id">
+            <dt class="text-[11px] font-semibold tracking-wide text-white/45">ID</dt>
+            <dd class="mt-1">
+              <a class="block truncate font-mono text-xs text-content no-underline hover:text-white" href="https://ordinals.com/inscription/<%= encodeURIComponent(inscription.id) %>" target="_blank" rel="noopener" data-testid="detail-id-link"><%= inscription.id %></a>
+            </dd>
           </div>
-
-          <div class="space-y-2 text-sm text-white/65">
-            <div class="flex items-baseline justify-between gap-3">
-              <div class="text-white/55">Network fee</div>
-              <div class="font-mono text-sm text-white/85"><span data-checkout-target="fee">0</span> SATS</div>
-            </div>
-            <div class="flex items-baseline justify-between gap-3">
-              <div class="font-semibold text-white/75">Total</div>
-              <div class="font-mono text-sm font-semibold text-orange-500"><span data-checkout-target="total">0</span> SATS</div>
-            </div>
+          <div data-testid="detail-number">
+            <dt class="text-[11px] font-semibold tracking-wide text-white/45">Number</dt>
+            <dd class="mt-1">
+              <a class="block font-mono text-xs text-content no-underline hover:text-white" href="https://ordinals.com/inscription/<%= encodeURIComponent(inscription.id) %>" target="_blank" rel="noopener" data-testid="detail-number-link"><%= inscription.number %></a>
+            </dd>
           </div>
-        </div>
-
-        <form class="mt-6" method="post" action="<%= buy.action %>" data-testid="buy-form">
-          <button
-            class="w-full border border-synth-red/40 bg-synth-red/15 px-4 py-3 text-sm font-semibold tracking-tight text-white/95 hover:bg-synth-red/20"
-            type="submit"
-            data-testid="buy-button"
-            data-action="click->store#buy"
-          >Buy now</button>
-        </form>
-
-        <div class="<%= buy.errorClass %> mt-4 border border-white/10 bg-white/[0.03] px-4 py-3" data-testid="buy-error">
-          <div class="text-sm font-semibold text-white/85">Buy</div>
-          <div class="mt-2 font-mono text-xs leading-relaxed text-white/60"><%= buy.error %></div>
-        </div>
-
-        <div class="mt-6 border-t border-white/10 pt-4" data-testid="details">
-          <div class="text-sm font-semibold text-white/85">Details</div>
-          <dl class="mt-3 space-y-2 text-sm text-white/65">
-            <div class="flex items-baseline justify-between gap-4">
-              <dt class="text-white/55">Inscription</dt>
-              <dd class="truncate font-mono text-xs text-white/70"><%= inscription.id %></dd>
+          <div data-testid="detail-sat">
+            <dt class="text-[11px] font-semibold tracking-wide text-white/45">Sat</dt>
+            <dd class="mt-1">
+              <a class="block font-mono text-xs text-content no-underline hover:text-white" href="https://ordinals.com/sat/<%= encodeURIComponent(inscription.sat) %>" target="_blank" rel="noopener" data-testid="detail-sat-link"><%= inscription.sat %></a>
+            </dd>
+          </div>
+          <% if (inscription.charmIcons.length > 0) { %>
+            <div data-testid="detail-charms">
+              <dt class="text-[11px] font-semibold tracking-wide text-white/45">Charms</dt>
+              <dd class="mt-1 flex flex-wrap items-center gap-2 text-base" data-testid="detail-charms-icons">
+                <% inscription.charmIcons.forEach((icon) => { %>
+                  <span aria-hidden="true"><%= icon %></span>
+                <% }) %>
+              </dd>
             </div>
-            <div class="flex items-baseline justify-between gap-4">
-              <dt class="text-white/55">Number</dt>
-              <dd class="font-mono text-xs text-white/70"><%= inscription.number %></dd>
+          <% } %>
+          <% if (inscription.parents.length > 0) { %>
+            <div data-testid="detail-parents">
+              <dt class="text-[11px] font-semibold tracking-wide text-white/45">Parents</dt>
+              <dd class="mt-1 space-y-1" data-testid="detail-parents-list">
+                <% inscription.parents.forEach((parentId) => { %>
+                  <a class="block truncate font-mono text-xs text-content no-underline hover:text-white" href="https://ordinals.com/inscription/<%= encodeURIComponent(parentId) %>" target="_blank" rel="noopener" title="<%= parentId %>" data-testid="detail-parent-link"><%= parentId %></a>
+                <% }) %>
+              </dd>
             </div>
-            <div class="flex items-baseline justify-between gap-4">
-              <dt class="text-white/55">Seller</dt>
-              <dd class="truncate font-mono text-xs text-white/70"><%= CONFIG.store_address %></dd>
-            </div>
-          </dl>
-        </div>
+          <% } %>
+          <div data-testid="detail-inscribed">
+            <dt class="text-[11px] font-semibold tracking-wide text-white/45">Inscribed</dt>
+            <dd class="mt-1">
+              <% const inscribedIso = new Date(inscription.timestamp * 1000).toISOString() %>
+              <% const inscribedHuman = new Date(inscription.timestamp * 1000).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }) %>
+              <time class="block font-mono text-xs text-content" datetime="<%= inscribedIso %>" data-testid="detail-inscribed-value"><%= inscribedHuman %></time>
+            </dd>
+          </div>
+        </dl>
       </div>
     </aside>
+  </div>
+
+  <div class="mt-4">
+    <% if (order.status === 'pending' || order.status === 'confirmed') { %>
+      <%- include('partials/order', { order }) %>
+    <% } else { %>
+      <div class="border border-orange-500/25 bg-white/[0.02] px-5 py-5" data-testid="price-card">
+        <div class="text-xs font-semibold tracking-wide text-white/60">Price</div>
+        <div class="mt-2 flex items-baseline gap-2" data-testid="price-row">
+          <div class="text-3xl font-semibold tracking-tight text-orange-500" data-testid="price-sats"><%= formatSats(checkout.priceSats) %></div>
+        </div>
+        <div class="hidden mt-1 font-mono text-xs text-white/50" data-usd-sats="<%= checkout.priceSats %>"></div>
+      </div>
+
+      <div class="mt-4 border border-white/10 bg-white/[0.03] px-5 py-5" data-testid="purchase-panel">
+      <form class="mt-0" method="post" data-testid="buy-form" data-inscription-target="form">
+        <% if (order.status !== 'pending' && order.status !== 'confirmed') { %>
+          <% if ((config.optional_payments ?? []).length > 0) { %>
+            <div data-testid="optional-payments">
+              <div class="text-xs font-semibold tracking-wide text-white/60">Include additional payments</div>
+              <div class="mt-3 space-y-2">
+              <% config.optional_payments.forEach((payment, index) => { %>
+                  <label class="grid grid-cols-[16px_1fr_104px] gap-x-2 gap-y-1 border border-white/10 bg-white/[0.02] px-3 py-3 hover:border-white/20 hover:bg-white/[0.03]" data-testid="optional-payment">
+                  <input class="mt-[3px] h-4 w-4 border border-white/20 bg-white/[0.02]" type="checkbox" data-inscription-target="optionalPayment" data-payment='<%= JSON.stringify(payment) %>' data-action="inscription#calculateCost" />
+
+                  <div class="min-w-0 truncate text-sm font-semibold text-indigo-400"><%= payment.title %></div>
+                  <div class="text-right font-mono text-xs tabular-nums text-orange-500"><%= formatSats(payment.amount) %></div>
+                  <div class="col-start-1 col-span-2 min-w-0 truncate whitespace-nowrap text-xs text-white/55"><%= payment.description %></div>
+                  <div class="hidden col-start-3 text-right font-mono text-[11px] text-white/50" data-usd-sats="<%= payment.amount %>"></div>
+                  </label>
+                <% }) %>
+              </div>
+            </div>
+          <% } %>
+
+          <div class="mt-5 space-y-4" data-testid="fees">
+            <div class="space-y-2 text-sm text-white/65" data-inscription-target="fees">
+              <div class="flex items-baseline justify-between gap-3">
+                <div class="text-white/55">Network fee</div>
+                <div class="text-right">
+                  <div class="font-mono text-sm text-content"><span data-inscription-target="fee">-</span></div>
+                  <div class="mt-1 font-mono text-xs text-white/50"><span data-inscription-target="feeRate">-</span></div>
+                </div>
+              </div>
+              <div class="flex items-baseline justify-between gap-3">
+                <div class="font-semibold text-white/75">Total</div>
+                <div class="text-right">
+                  <div class="font-mono text-sm font-semibold text-orange-500"><span data-inscription-target="total">-</span></div>
+                  <div class="hidden mt-1 font-mono text-xs text-white/50" data-usd-role="total" data-usd-sats=""></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% } %>
+
+        <div class="mt-6">
+        <% if (order.status === 'pending' || order.status === 'confirmed') { %>
+          <button
+            class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold tracking-tight transition-colors <%= order.status === 'pending' ? 'border border-orange-500/35 bg-orange-500/10 text-orange-400 opacity-80 cursor-wait' : 'border border-white/10 bg-white/[0.02] text-white/55 cursor-default' %>"
+            type="button"
+            data-testid="buy-button"
+            disabled
+          >
+            <span><%= order.status === 'pending' ? 'Purchase Pending' : 'Sold' %></span>
+          </button>
+        <% } else { %>
+        <button
+          class="hide-on-connected w-full inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold tracking-tight transition-colors border border-white/10 bg-white/[0.02] text-white/45 cursor-not-allowed"
+          type="button"
+          data-inscription-target="connectButton"
+          disabled
+        >
+          <span>Connect wallet to buy</span>
+        </button>
+
+        <button
+          class="show-on-connected w-full px-4 py-3 text-sm font-semibold tracking-tight transition-colors border border-emerald-400/25 bg-emerald-400/10 text-emerald-200 hover:bg-emerald-400/15"
+          type="button"
+          data-inscription-target="prepareButton"
+          data-action="click->inscription#prepare"
+        >
+          <span class="inline-flex w-full items-center justify-center gap-2">
+            <span data-inscription-target="prepareSpinner" class="button-spinner button-spinner-hidden"></span>
+            <span data-inscription-target="prepareLabel">Prepare Purchase</span>
+          </span>
+        </button>
+
+        <button
+          class="hidden w-full px-4 py-3 text-sm font-semibold tracking-tight transition-colors border border-orange-500/35 bg-orange-500/10 text-orange-400 hover:bg-orange-500/15"
+          type="button"
+          data-testid="buy-button"
+          data-inscription-target="buyButton"
+          data-action="click->inscription#buy"
+        >
+          <span class="inline-flex w-full items-center justify-center gap-2">
+            <span data-inscription-target="buySpinner" class="button-spinner button-spinner-hidden"></span>
+            <span data-inscription-target="buyLabel">Complete Purchase</span>
+          </span>
+        </button>
+        <% } %>
+        </div>
+      </form>
+
+      <div class="<%= (order.status === 'pending' || order.status === 'confirmed') ? '' : 'hidden' %> mt-4 border border-emerald-400/25 bg-emerald-400/10 px-4 py-3" data-inscription-target="successPanel" data-testid="buy-success">
+        <div class="text-sm font-semibold text-emerald-200" data-inscription-target="successTitle"><%= order.status === 'pending' ? 'Purchase Pending' : (order.status === 'confirmed' ? 'Sold' : 'Congrats 🎉') %></div>
+          <div class="mt-2 text-xs font-semibold text-white/60">
+          <a class="font-mono text-xs text-orange-500 no-underline hover:text-orange-400" target="_blank" rel="noopener" data-inscription-target="successLink" href="https://mempool.space/tx/<%= order.txid ?? '' %>">View transaction on mempool.space</a>
+        </div>
+      </div>
+
+      <div class="hidden mt-4 border border-synth-red/35 bg-synth-red/10 px-4 py-3" data-inscription-target="errorPanel" data-testid="buy-client-error">
+        <div class="text-sm font-semibold text-synth-red" data-inscription-target="errorTitle">Something went wrong</div>
+        <div class="mt-2 font-mono text-xs leading-relaxed text-white/70" data-inscription-target="errorMessage"></div>
+      </div>
+    </div>
+    <% } %>
   </div>
 </section>

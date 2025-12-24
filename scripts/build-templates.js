@@ -5,7 +5,30 @@ import ejs from 'ejs'
 const root = process.cwd()
 const themesRoot = path.join(root, 'app', 'themes')
 
-const destructuredLocals = ['title', 'body', 'assets', 'CONFIG', 'storefront', 'pagination', 'item', 'inscription', 'checkout', 'buy']
+const destructuredLocals = [
+  'title',
+  'body',
+  'assets',
+  'CONFIG',
+  'formatSats',
+  'include',
+  'config',
+  'storefront',
+  'collection',
+  'collections',
+  'artist',
+  'pagination',
+  'item',
+  'inscription',
+  'parentInscription',
+  'checkout',
+  'buy',
+  'policy',
+  'policyYaml',
+  'walletAddress',
+  'orders',
+  'order',
+]
 
 async function main() {
   const outDir = path.join(root, 'generated')

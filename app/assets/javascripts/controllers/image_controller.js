@@ -1,15 +1,17 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-  static targets = ['img', 'skeleton']
+  static targets = ['media', 'img', 'skeleton']
 
   connect() {
-    if (this.imgTarget?.complete) this.loaded()
+    if (this.hasImgTarget && this.imgTarget.complete) this.loaded()
   }
 
   loaded() {
-    this.imgTarget.classList.remove('opacity-0')
-    this.imgTarget.classList.add('opacity-100')
+    const el = this.hasMediaTarget ? this.mediaTarget : this.imgTarget
+    if (!el) return
+    el.classList.remove('opacity-0')
+    el.classList.add('opacity-100')
     this.skeletonTarget.classList.add('hidden')
   }
 

@@ -1,0 +1,52 @@
+<div class="win-border bg-win-surface px-4 py-4" data-testid="order-panel">
+  <div class="win-inset bg-white px-3 py-3">
+    <% const headerClass = order.status === 'pending' ? 'text-win-orange' : 'text-win-green' %>
+    <div class="text-sm font-bold <%= headerClass %>"><%= order.status === 'pending' ? 'This inscription purchase is pending' : 'This inscription has sold' %></div>
+    <dl class="mt-3 space-y-2" data-testid="order-details">
+      <% const statusClass = order.status === 'pending' ? 'text-win-orange' : (order.status === 'confirmed' ? 'text-win-green' : 'text-win-black') %>
+      <div>
+        <dt class="text-[11px] font-bold text-win-gray">Status</dt>
+        <dd class="mt-1 text-sm font-bold <%= statusClass %>"><%= order.status %></dd>
+      </div>
+      <div>
+        <dt class="text-[11px] font-bold text-win-gray">Price</dt>
+        <dd class="mt-1 font-mono text-sm font-bold text-win-blue"><%= formatSats(order.price_sats) %></dd>
+      </div>
+      <div>
+        <dt class="text-[11px] font-bold text-win-gray">Buyer</dt>
+        <dd class="mt-1 font-mono text-[11px] text-win-blue break-all"><%= order.buyer_address %></dd>
+      </div>
+      <div>
+        <dt class="text-[11px] font-bold text-win-gray">Transaction</dt>
+        <dd class="mt-1">
+          <a class="block font-mono text-[11px] text-win-orange underline break-all" target="_blank" rel="noopener" href="https://mempool.space/tx/<%= order.txid %>"><%= order.txid %></a>
+        </dd>
+      </div>
+      <% if (order.created_at) { %>
+        <% const createdIso = new Date(order.created_at * 1000).toISOString() %>
+        <% const createdHuman = new Date(order.created_at * 1000).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }) %>
+        <div>
+          <dt class="text-[11px] font-bold text-win-gray">Created</dt>
+          <dd class="mt-1 font-mono text-[11px] text-win-blue"><time datetime="<%= createdIso %>"><%= createdHuman %></time></dd>
+        </div>
+      <% } %>
+    </dl>
+
+    <% const extra = JSON.parse(order.extra_details || '{}') %>
+    <% const optionalPayments = extra.optional_payments || [] %>
+    <% if (optionalPayments.length > 0) { %>
+      <div class="mt-4 pt-4 border-t-2 border-black" data-testid="order-optional-payments">
+        <div class="text-[11px] font-bold">Include additional payments</div>
+        <dl class="mt-2 space-y-2">
+          <% optionalPayments.forEach((p) => { %>
+            <div class="win-inset bg-white px-3 py-2 flex items-baseline justify-between gap-3">
+              <dt class="min-w-0 truncate text-sm font-bold"><%= p.title %></dt>
+              <dd class="shrink-0 font-mono text-[11px] text-win-orange"><%= formatSats(p.amount) %></dd>
+            </div>
+          <% }) %>
+        </dl>
+      </div>
+    <% } %>
+  </div>
+</div>
+

@@ -1,32 +1,64 @@
 <a
-  class="win-border group block bg-[#e0e0e0] text-black"
-  href="<%= item.link %>"
+  class="win-border group block bg-win-surface text-win-black"
+  href="/<%= encodeURIComponent(collection.slug) %>/<%= encodeURIComponent(inscription.id) %>"
   data-testid="inscription-card"
-  data-inscription-id="<%= item.id %>"
+  data-inscription-id="<%= inscription.id %>"
 >
-  <div class="relative aspect-square win-inset bg-white" data-controller="image">
+  <div class="relative aspect-square win-inset bg-white <%= (order && (order.status === 'pending' || order.status === 'confirmed')) ? 'opacity-60 grayscale' : '' %>" data-controller="image">
     <div
       class="absolute inset-0 bg-[repeating-linear-gradient(45deg,#ddd_0px,#ddd_6px,#eee_6px,#eee_12px)]"
       data-image-target="skeleton"
     ></div>
+    <% if (order && order.status === 'pending') { %>
+      <div class="absolute inset-0 flex items-center justify-center bg-white/40">
+        <span class="button-spinner text-win-orange"></span>
+      </div>
+    <% } %>
+    <% if (order && order.status === 'confirmed') { %>
+      <div class="absolute inset-0 flex items-center justify-center bg-white/30">
+        <span class="text-[11px] font-bold tracking-[0.22em] text-win-green">SOLD</span>
+      </div>
+    <% } %>
+    <% if (inscription.isImage) { %>
     <img
-      src="<%= item.thumbnailUrl %>"
-      alt="<%= item.title %>"
+        src="<%= inscription.contentUrl %>"
+        alt="<%= inscription.title %>"
       loading="lazy"
       decoding="async"
+        style="image-rendering: pixelated"
       class="block h-full w-full object-cover opacity-0 transition-opacity duration-300"
       data-image-target="img"
       data-action="load->image#loaded error->image#error"
       data-testid="inscription-thumb"
     />
+    <% } else { %>
+      <iframe
+        src="<%= inscription.previewUrl %>"
+        class="block h-full w-full border-0 pointer-events-none opacity-0 transition-opacity duration-300"
+        loading="lazy"
+        allow="accelerometer; gyroscope"
+        data-image-target="media"
+        data-action="load->image#loaded error->image#error"
+        data-testid="inscription-thumb"
+      ></iframe>
+    <% } %>
   </div>
   <div class="px-3 py-3">
     <div class="flex items-start justify-between gap-3">
-      <div class="min-w-0">
-        <div class="truncate text-sm font-bold leading-snug tracking-tight" data-testid="inscription-title"><%= item.title %></div>
+      <div class="min-w-0 flex-1">
+        <div class="flex w-full items-center justify-between gap-2 min-w-0" data-testid="inscription-title">
+          <div class="min-w-0 truncate text-sm font-bold leading-snug tracking-tight"><%= inscription.title %></div>
+          <div class="shrink-0 flex items-center gap-2">
+            <% if (order && order.status === 'pending') { %>
+              <span class="button-spinner text-win-orange"></span>
+            <% } %>
+            <% if (order && order.status === 'confirmed') { %>
+              <span class="text-[11px] font-bold text-win-green">SOLD</span>
+            <% } %>
+          </div>
+        </div>
+        <div class="mt-2 font-mono text-[11px] text-win-green" data-testid="inscription-price"><%= formatSats(collection.price_sats) %></div>
       </div>
-      <div class="shrink-0 font-mono text-[11px]" data-testid="inscription-number"><%= item.number %></div>
     </div>
-    <div class="mt-2 truncate font-mono text-[11px]" data-testid="inscription-id"><%= item.id %></div>
   </div>
 </a>

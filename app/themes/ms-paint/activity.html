@@ -1,0 +1,71 @@
+<section class="pb-6" data-testid="activity-page">
+  <div class="mb-4">
+    <h1 class="text-sm font-bold tracking-tight" data-testid="page-title">Activity</h1>
+  </div>
+
+  <% if ((orders ?? []).length === 0) { %>
+    <div class="win-inset bg-white px-4 py-8 text-center" data-testid="empty-state">
+      <div class="text-sm font-bold">No activity yet</div>
+    </div>
+  <% } else { %>
+    <div class="space-y-3" data-testid="orders">
+      <% orders.forEach((o) => { %>
+        <% const statusClass = o.status === 'pending' ? 'text-win-orange' : (o.status === 'confirmed' ? 'text-win-green' : 'text-win-gray') %>
+        <% const activityLabel = o.status === 'confirmed' ? 'Sold' : (o.status === 'pending' ? 'Pending' : o.status) %>
+        <% const createdHuman = o.created_at ? new Date(o.created_at * 1000).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' }) : '' %>
+        <div class="win-inset bg-white px-3 py-3" data-testid="order-row">
+          <div class="flex items-start gap-3">
+            <a class="block shrink-0" href="/<%= encodeURIComponent(o.collection_slug) %>/<%= encodeURIComponent(o.inscription_id) %>" data-testid="order-thumb-link">
+              <div class="relative h-16 w-16 win-inset bg-white overflow-hidden <%= (o.status === 'pending' || o.status === 'confirmed') ? 'opacity-60 grayscale' : '' %>" data-controller="image" data-testid="order-thumb">
+                <div class="absolute inset-0 win-skeleton" data-image-target="skeleton"></div>
+                <% if (o.status === 'pending') { %>
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <span class="button-spinner text-win-orange"></span>
+                  </div>
+                <% } %>
+                <% if (o.status === 'confirmed') { %>
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <span class="text-[10px] font-bold tracking-[0.22em] text-win-green">SOLD</span>
+                  </div>
+                <% } %>
+                <iframe
+                  src="https://ordinals.com/preview/<%= encodeURIComponent(o.inscription_id) %>"
+                  class="block h-full w-full border-0 pointer-events-none opacity-0 transition-opacity duration-300"
+                  loading="lazy"
+                  data-image-target="media"
+                  data-action="load->image#loaded error->image#error"
+                  data-testid="order-thumb-media"
+                ></iframe>
+              </div>
+            </a>
+
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-baseline justify-between gap-2">
+                <a class="min-w-0 truncate font-mono text-[11px] text-win-blue underline" href="/<%= encodeURIComponent(o.collection_slug) %>/<%= encodeURIComponent(o.inscription_id) %>" data-testid="order-inscription-link"><%= o.inscription_id %></a>
+                <span class="shrink-0 text-[11px] font-bold <%= statusClass %>" data-testid="order-status"><%= activityLabel %></span>
+              </div>
+
+              <div class="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[11px]" data-testid="order-meta">
+                <span class="font-mono text-win-gray" data-testid="order-collection"><%= o.collection_slug %></span>
+                <% if (o.price_sats) { %>
+                  <span class="font-mono text-win-orange" data-testid="order-price"><%= formatSats(o.price_sats) %></span>
+                <% } %>
+                <% if (createdHuman) { %>
+                  <span class="font-mono text-win-gray" data-testid="order-created"><%= createdHuman %></span>
+                <% } %>
+              </div>
+
+              <% if (o.txid) { %>
+                <div class="mt-2 font-mono text-[11px]">
+                  <a class="text-win-orange underline break-all block" href="https://mempool.space/tx/<%= encodeURIComponent(o.txid) %>" target="_blank" rel="noopener" data-testid="order-tx-link"><%= o.txid %></a>
+                </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</section>
+
+

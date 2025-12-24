@@ -1,30 +1,95 @@
 <section class="pb-6" data-testid="inscriptions-page">
   <h2 class="sr-only" data-testid="page-title">Store</h2>
 
-  <div class="win-border bg-[#e0e0e0] px-4 py-4">
+  <div class="win-border bg-win-surface px-4 py-4">
+    <% if (collection.parent_inscription_id) { %>
+      <div class="mb-4 win-inset overflow-hidden bg-white" data-testid="parent-banner">
+        <div class="flex items-stretch">
+          <a
+            class="block w-20 shrink-0 overflow-hidden border-r-2 border-black bg-white"
+            href="/<%= encodeURIComponent(collection.slug) %>"
+            data-testid="parent-thumb-link"
+          >
+            <img
+              src="https://ordinals.com/content/<%= encodeURIComponent(collection.parent_inscription_id) %>"
+              alt=""
+              loading="lazy"
+              decoding="async"
+              style="image-rendering: pixelated"
+              class="block h-full w-full object-cover"
+              data-testid="parent-thumb"
+            />
+          </a>
+          <div class="min-w-0 px-3 py-3 flex flex-col justify-center" data-testid="parent-meta">
+            <div class="flex min-w-0 items-baseline gap-2" data-testid="parent-title-row">
+              <a class="min-w-0 truncate text-xs font-bold underline" href="/<%= encodeURIComponent(collection.slug) %>" data-testid="parent-collection-link"><%= collection.title %></a>
+              <a class="shrink-0 inline-flex items-center gap-2 font-mono text-[11px] underline" href="https://ordinals.com/inscription/<%= encodeURIComponent(collection.parent_inscription_id) %>" target="_blank" rel="noopener" data-testid="parent-ordinals-number-link"><span>#<%= parentInscription.number %></span><span class="ord-dot" aria-hidden="true">◉</span></a>
+            </div>
+            <div class="mt-2 flex flex-wrap items-center gap-2 font-mono text-[11px]" data-testid="parent-info">
+              <span class="inline-flex items-center gap-2" data-testid="parent-children" data-tooltip="On-chain parent child provenance" title="On-chain parent child provenance">
+                <span class="text-win-maroon" aria-hidden="true">🧬</span>
+                <span class="text-win-blue"><%= new Intl.NumberFormat('en-US').format(parentInscription.childCount) %></span>
+              </span>
+              <span aria-hidden="true">|</span>
+              <% if (parentInscription.isSealed) { %>
+                <span class="inline-flex items-center gap-2 font-bold uppercase text-win-maroon" data-testid="parent-sealed" data-tooltip="The parent inscription owner cannot create more children" title="The parent inscription owner cannot create more children"><span aria-hidden="true">🔥</span><span>Sealed</span></span>
+              <% } else { %>
+                <span class="inline-flex items-center gap-2 font-bold uppercase text-win-green" data-testid="parent-unsealed" data-tooltip="The parent inscription owner can create more children" title="The parent inscription owner can create more children"><span aria-hidden="true">🔓</span><span>Unsealed</span></span>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+    <% if ((collection.itemsCount ?? 0) === 0) { %>
+      <div class="win-inset bg-white px-4 py-8 text-center" data-testid="empty-state">
+        <div class="text-sm font-bold" data-testid="empty-title">No inscriptions available</div>
+      </div>
+    <% } else { %>
     <div data-testid="grid" class="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4">
-      <%- storefront.itemsHtml %>
+        <%- collection.itemsHtml %>
     </div>
+    <% } %>
 
+    <% if ((collection.itemsCount ?? 0) > 0 && (pagination.totalPages ?? 1) > 1) { %>
     <div class="mt-6 flex items-center justify-between gap-3" data-testid="pagination">
       <a
-        class="<%= pagination.prevClass %> win-button bg-[#e0e0e0] px-3 py-2 text-xs font-bold"
+          class="win-button bg-win-surface px-3 py-2 text-xs font-bold <%= pagination.hasPrev ? '' : 'invisible' %>"
         href="<%= pagination.prevUrl %>"
         data-testid="prev-page"
         data-action="click->store#paginate"
       >Prev</a>
 
-      <div class="win-inset bg-white px-3 py-2 font-mono text-xs" data-testid="cursor-pill">
-        <strong class="font-bold">Page</strong>
-        <span data-store-target="cursor"><%= pagination.cursor %></span>
+      <div class="flex flex-wrap items-center justify-center gap-2" data-testid="page-links">
+        <% if ((pagination.pages ?? []).length > 0) { %>
+            <% pagination.pages.forEach((pageLink) => { %>
+              <% if (pageLink.type === 'gap') { %>
+              <span class="px-2 py-2 text-xs font-bold" aria-hidden="true">...</span>
+            <% } else { %>
+              <a
+                  class="win-button bg-win-surface px-3 py-2 text-xs font-bold <%= pageLink.isActive ? 'bg-win-yellow' : '' %>"
+                  href="<%= pageLink.url %>"
+                data-testid="page-link"
+                  data-page="<%= pageLink.n %>"
+                data-action="click->store#paginate"
+                ><%= pageLink.n %></a>
+            <% } %>
+          <% }) %>
+        <% } else { %>
+            <div class="win-inset bg-white px-3 py-2 font-mono text-xs" data-testid="page-pill">
+            <strong class="font-bold">Page</strong>
+              <span data-store-target="page"><%= pagination.page %></span>
+          </div>
+        <% } %>
       </div>
 
       <a
-        class="<%= pagination.nextClass %> win-button bg-[#e0e0e0] px-3 py-2 text-xs font-bold"
+          class="win-button bg-win-surface px-3 py-2 text-xs font-bold <%= pagination.hasNext ? '' : 'invisible' %>"
         href="<%= pagination.nextUrl %>"
         data-testid="next-page"
         data-action="click->store#paginate"
       >Next</a>
     </div>
+    <% } %>
   </div>
 </section>
