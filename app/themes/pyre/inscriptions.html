@@ -1,0 +1,54 @@
+<section data-testid="inscriptions-page">
+  <h2 class="sr-only" data-testid="page-title">Collection</h2>
+
+  <section class="collection-section">
+    <!-- Collection Header -->
+    <div class="collection-header">
+      <div class="collection-title-group">
+        <span class="collection-jp">聖なる遺物</span>
+        <h2 class="collection-title"><%= collection.title.toUpperCase() %></h2>
+      </div>
+      <span class="collection-count"><%= collection.itemsCount ?? 0 %> INSCRIPTIONS</span>
+    </div>
+
+    <!-- Collection Stats -->
+    <div class="collection-stats-bar">
+      <span>ARTIFACTS: <%= collection.itemsCount ?? 0 %></span>
+      <span>FLOOR: <%= formatSats(collection.price_sats) %></span>
+      <% if (collection.parent_inscription_id || collection.gallery_inscription_id) { %>
+        <% const isGallery = Boolean(collection.gallery_inscription_id) %>
+        <% if (isGallery) { %>
+          <span>GALLERY: <%= new Intl.NumberFormat('en-US').format(parentInscription.galleryCount) %> TOTAL</span>
+        <% } else { %>
+          <span>PARENT: <%= new Intl.NumberFormat('en-US').format(parentInscription.childCount) %> CHILDREN</span>
+        <% } %>
+      <% } %>
+    </div>
+
+    <!-- Inscription Grid -->
+    <% if ((collection.itemsCount ?? 0) === 0) { %>
+      <div class="empty-state" data-testid="empty-state">
+        <p data-testid="empty-title">NO ARTIFACTS DETECTED</p>
+      </div>
+    <% } else { %>
+      <div class="collection-grid" data-testid="grid">
+        <%- collection.itemsHtml %>
+      </div>
+
+      <!-- Pagination -->
+      <% if ((pagination.totalPages ?? 1) > 1) { %>
+        <div class="pagination" data-testid="pagination">
+          <a href="<%= pagination.prevUrl %>" class="page-btn <%= pagination.hasPrev ? '' : 'disabled' %>" data-action="click->store#paginate" data-testid="prev-page">PREV</a>
+          <% if ((pagination.pages ?? []).length > 0) { %>
+            <% pagination.pages.forEach((pageLink) => { %>
+              <% if (pageLink.type !== 'gap') { %>
+                <a href="<%= pageLink.url %>" class="page-btn <%= pageLink.isActive ? 'active' : '' %>" data-action="click->store#paginate" data-testid="page-link"><%= pageLink.n %></a>
+              <% } %>
+            <% }) %>
+          <% } %>
+          <a href="<%= pagination.nextUrl %>" class="page-btn <%= pagination.hasNext ? '' : 'disabled' %>" data-action="click->store#paginate" data-testid="next-page">NEXT</a>
+        </div>
+      <% } %>
+    <% } %>
+  </section>
+</section>

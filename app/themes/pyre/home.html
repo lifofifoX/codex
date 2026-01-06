@@ -1,0 +1,134 @@
+<section data-testid="home-page">
+  <!-- Hero Section -->
+  <div class="hero">
+    <div class="hero-bg-silhouette"></div>
+    <div class="hero-glow"></div>
+    <h1 class="hero-title"><%= CONFIG.artist_name %></h1>
+    <p class="hero-subtitle">内なる炎</p>
+    <p class="hero-tagline">Sacred Digital Artifacts</p>
+  </div>
+
+  <!-- Featured Collection (if exists) -->
+  <% if ((collections ?? []).length > 0) { %>
+    <section class="featured-section">
+      <span class="section-marker">聖遺物 001</span>
+      <div class="featured-container">
+        <span class="featured-label">Featured Collection</span>
+        <h2 class="featured-title"><%= collections[0].title %></h2>
+        <a href="/<%= encodeURIComponent(collections[0].slug) %>" class="featured-artwork">
+          <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Noto Sans JP', sans-serif; font-size: 3rem; color: #404040; opacity: 0.5;">炎</span>
+          <span style="position: absolute; bottom: 1rem; right: 1rem; font-family: 'Inter', sans-serif; font-size: 0.625rem; color: #737373; letter-spacing: 0.1em;"><%= collections[0].availableCount %> ARTIFACTS</span>
+        </a>
+        <div style="margin-top: 2rem; text-align: center;">
+          <div style="font-family: 'Playfair Display', serif; font-size: 2rem; color: #dc2626; font-weight: 700;"><%= formatSats(collections[0].priceSats) %></div>
+        </div>
+      </div>
+    </section>
+  <% } %>
+
+  <!-- Collection Grid -->
+  <section class="collection-section">
+    <div class="collection-header">
+      <div class="collection-title-group">
+        <span class="collection-jp">聖なる遺物</span>
+        <h2 class="collection-title">SACRED ARTIFACTS</h2>
+      </div>
+      <span class="collection-count"><%= (collections ?? []).length %> COLLECTIONS</span>
+    </div>
+
+    <% if ((collections ?? []).length === 0) { %>
+      <div class="empty-state" data-testid="empty-state">
+        <p>NO ARTIFACTS AVAILABLE</p>
+      </div>
+    <% } else { %>
+      <div class="collection-grid" data-testid="collections">
+        <% (collections ?? []).forEach((collection, index) => { %>
+          <a
+            class="inscription-card"
+            href="/<%= encodeURIComponent(collection.slug) %>"
+            data-testid="collection-card"
+            data-collection-slug="<%= collection.slug %>"
+          >
+            <span class="card-number"><%= String(index + 1).padStart(2, '0') %></span>
+            <span class="card-placeholder">聖</span>
+            <div class="card-info" style="transform: translateY(0);">
+              <h3 class="card-title" data-testid="collection-title"><%= collection.title %></h3>
+              <span class="card-price" data-testid="collection-price"><%= formatSats(collection.priceSats) %></span>
+            </div>
+            <div style="position: absolute; bottom: 4rem; right: 1rem; font-size: 0.625rem; color: #777; letter-spacing: 0.1em;"><%= collection.availableCount %> AVAILABLE</div>
+          </a>
+        <% }) %>
+      </div>
+    <% } %>
+  </section>
+
+  <!-- Creator Section (Artist Bio) -->
+  <section class="creator-section">
+    <div class="creator-bg">
+      <div class="creator-silhouette"></div>
+      <div class="hands-glow"></div>
+    </div>
+    <div class="creator-content">
+      <div class="creator-header">
+        <span class="creator-jp">創造者 /// THE ONE WHO SHAPES</span>
+        <h2 class="creator-title">THE CREATOR</h2>
+        <% if (CONFIG.artist_avatar_url) { %>
+          <div class="creator-avatar">
+            <img src="<%= CONFIG.artist_avatar_url %>" alt="<%= CONFIG.artist_name %>" />
+          </div>
+        <% } else { %>
+          <div class="creator-avatar"><%= CONFIG.artist_name.charAt(0).toUpperCase() %></div>
+        <% } %>
+      </div>
+
+      <% if (artist.about) { %>
+        <div class="manifesto-columns">
+          <div class="manifesto-column">
+            <span class="manifesto-number">I</span>
+            <h3 class="manifesto-title">The Covenant</h3>
+            <p class="manifesto-text" data-testid="artist-about">
+              <%= artist.about %>
+            </p>
+            <p class="manifesto-jp-decoration">永遠の炎</p>
+          </div>
+          <div class="manifesto-column">
+            <span class="manifesto-number">II</span>
+            <h3 class="manifesto-title">Sacred Protocol</h3>
+            <p class="manifesto-text">
+              No intermediaries. No gatekeepers. Here, in this digital sanctuary,
+              artist and collector commune directly through the liturgy of PSBTs.
+              The blockchain witnesses all transactions, an impartial oracle
+              recording our exchanges for eternity. Trust the protocol.
+            </p>
+            <p class="manifesto-jp-decoration">信仰の儀式</p>
+          </div>
+          <div class="manifesto-column">
+            <span class="manifesto-number">III</span>
+            <h3 class="manifesto-title">Inner Flame</h3>
+            <p class="manifesto-text">
+              Every inscription is a window into the abyss, a mirror reflecting
+              the darkness within that we dare not name. These are not mere
+              images but vessels of intention, sigils encoded in witness data.
+              The pyre burns eternal.
+            </p>
+            <p class="manifesto-jp-decoration">内なる炎</p>
+          </div>
+        </div>
+      <% } %>
+
+      <% if (artist.socials.websiteUrl || artist.socials.xUrl || artist.socials.githubUrl) { %>
+        <div class="creator-socials" data-testid="artist-social">
+          <% if (artist.socials.websiteUrl) { %>
+            <a href="<%= artist.socials.websiteUrl %>" target="_blank" rel="noopener" data-testid="artist-social-website">WEBSITE</a>
+          <% } %>
+          <% if (artist.socials.xUrl) { %>
+            <a href="<%= artist.socials.xUrl %>" target="_blank" rel="noopener" data-testid="artist-social-x">X/TWITTER</a>
+          <% } %>
+          <% if (artist.socials.githubUrl) { %>
+            <a href="<%= artist.socials.githubUrl %>" target="_blank" rel="noopener" data-testid="artist-social-github">GITHUB</a>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+</section>

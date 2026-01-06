@@ -1,0 +1,51 @@
+<div data-testid="order-panel">
+  <% const isPending = order.status === 'pending' %>
+
+  <div class="detail-panel-price">
+    <span class="detail-price-label"><%= isPending ? 'Transaction Pending' : 'Fragment Acquired' %></span>
+
+    <div class="message <%= isPending ? 'message-pending' : 'message-success' %>" data-testid="order-banner" style="margin-top: 15px; margin-bottom: 15px;">
+      <div class="message-title"><%= isPending ? 'PROCESSING...' : 'RECOVERY COMPLETE' %></div>
+    </div>
+
+    <div data-testid="order-details" style="margin-top: 20px;">
+      <div class="fee-row">
+        <span class="label">STATUS</span>
+        <span class="value" style="<%= isPending ? 'color: var(--color-glitch-magenta);' : 'color: var(--color-matrix-green);' %>">
+          <% if (isPending) { %>
+            <span class="button-spinner" style="width: 12px; height: 12px; border-width: 1px; display: inline-block; vertical-align: middle; margin-right: 8px;"></span>
+          <% } %>
+          <%= order.status.toUpperCase() %>
+        </span>
+      </div>
+      <div class="fee-row">
+        <span class="label">PRICE</span>
+        <span class="value"><%= formatSats(order.price_sats) %></span>
+      </div>
+      <div class="fee-row">
+        <span class="label">BUYER</span>
+        <span class="value"><%= order.buyer_address.substring(0, 16) %>...</span>
+      </div>
+      <div class="fee-row">
+        <span class="label">TX</span>
+        <span class="value">
+          <a href="https://mempool.space/tx/<%= order.txid %>" target="_blank" rel="noopener" style="color: var(--color-glitch-cyan);"><%= order.txid.substring(0, 16) %>...</a>
+        </span>
+      </div>
+    </div>
+
+    <% const extra = JSON.parse(order.extra_details || '{}') %>
+    <% const optionalPayments = extra.optional_payments || [] %>
+    <% if (optionalPayments.length > 0) { %>
+      <div style="margin-top: 20px;" data-testid="order-optional-payments">
+        <div style="color: var(--color-matrix-green); font-size: 12px; letter-spacing: 2px; margin-bottom: 10px; text-transform: uppercase;">Additional Payments</div>
+        <% optionalPayments.forEach((p) => { %>
+          <div class="fee-row">
+            <span class="label"><%= p.title.toUpperCase() %></span>
+            <span class="value"><%= formatSats(p.amount) %></span>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</div>

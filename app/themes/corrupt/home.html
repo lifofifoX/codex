@@ -1,0 +1,92 @@
+<section data-testid="home-page">
+  <div class="section">
+    <!-- Recovered Profile (Artist Bio) -->
+    <article class="recovered-profile">
+      <div class="profile-photo-container">
+        <div class="profile-photo">
+          <% if (CONFIG.artist_avatar_url) { %>
+            <img src="<%= CONFIG.artist_avatar_url %>" alt="<%= CONFIG.artist_name %>" />
+          <% } else { %>
+            <%= CONFIG.artist_name.substring(0, 2).toUpperCase() %>
+          <% } %>
+        </div>
+        <div class="recovery-bar">
+          <div class="recovery-bar-header">
+            <span class="recovery-bar-label">Data Recovery</span>
+            <span class="recovery-bar-percent">78%</span>
+          </div>
+          <div class="recovery-bar-track">
+            <div class="recovery-bar-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-content">
+        <div class="profile-header">
+          <div class="profile-status">Partial Data Recovered</div>
+          <h2 class="profile-name"><%= CONFIG.artist_name %></h2>
+          <span class="profile-handle">@UNKNOWN_ORIGIN // BLOCK_HEIGHT: ████████</span>
+        </div>
+
+        <div class="profile-bio">
+          <% if (artist.about) { %>
+            <p data-testid="artist-about">
+              <%= artist.about %>
+            </p>
+          <% } else { %>
+            <p>
+              Digital archaeologist working at the intersection of ██████ technology and visual
+              corruption. Exploring the beauty in degraded data streams and transmission errors.
+              <span class="corrupted-text">░▒▓ DATA_CORRUPTED ▓▒░</span>
+            </p>
+          <% } %>
+        </div>
+
+        <% if (artist.socials.websiteUrl || artist.socials.xUrl || artist.socials.githubUrl) { %>
+          <div class="profile-links" data-testid="artist-social">
+            <% if (artist.socials.websiteUrl) { %>
+              <a href="<%= artist.socials.websiteUrl %>" target="_blank" rel="noopener" class="profile-link" data-testid="artist-social-website">Website ░░░</a>
+            <% } %>
+            <% if (artist.socials.xUrl) { %>
+              <a href="<%= artist.socials.xUrl %>" target="_blank" rel="noopener" class="profile-link" data-testid="artist-social-x">X ▓▓▓</a>
+            <% } %>
+            <% if (artist.socials.githubUrl) { %>
+              <a href="<%= artist.socials.githubUrl %>" target="_blank" rel="noopener" class="profile-link" data-testid="artist-social-github">Github ███</a>
+            <% } %>
+          </div>
+        <% } %>
+      </div>
+    </article>
+
+    <!-- Bento Grid - Collections -->
+    <% if ((collections ?? []).length === 0) { %>
+      <div class="empty-state" data-testid="empty-state">
+        <p>NO DATA FRAGMENTS AVAILABLE // SYSTEM STANDBY</p>
+      </div>
+    <% } else { %>
+      <div class="bento-grid" data-testid="collections">
+        <% (collections ?? []).forEach((collection, index) => { %>
+          <a
+            class="bento-item <%= index === 0 ? 'featured' : '' %>"
+            href="/<%= encodeURIComponent(collection.slug) %>"
+            data-testid="collection-card"
+            data-collection-slug="<%= collection.slug %>"
+          >
+            <% if (index === 0) { %>
+              <span class="bento-tag">Corrupted</span>
+            <% } %>
+            <h4 class="bento-title" data-testid="collection-title"><%= collection.title %></h4>
+            <p class="bento-subtitle">Vol. ██ — Data Fragments</p>
+            <div class="bento-preview <%= index === 0 ? 'glitched' : '' %>">
+              <span style="<%= index === 0 ? 'animation: rgb-split 2s infinite;' : '' %>"><%= collection.title.substring(0, 2).toUpperCase() %></span>
+            </div>
+            <div class="bento-stats">
+              <span class="bento-stat"><strong><%= collection.availableCount %></strong> Available</span>
+              <span class="bento-stat" data-testid="collection-price"><strong><%= formatSats(collection.priceSats).replace(' sats', '') %></strong> SATS</span>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</section>

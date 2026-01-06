@@ -1,0 +1,44 @@
+<a
+  class="inscription-card"
+  href="/<%= encodeURIComponent(collection.slug) %>/<%= encodeURIComponent(inscription.id) %>"
+  data-testid="inscription-card"
+  data-inscription-id="<%= inscription.id %>"
+>
+  <span class="card-number">#<%= new Intl.NumberFormat('en-US').format(inscription.number) %></span>
+
+  <div class="card-media" data-controller="image">
+    <div class="inscription-skeleton" data-image-target="skeleton"></div>
+    <% if (inscription.isImage) { %>
+      <img
+        src="<%= inscription.contentUrl %>"
+        alt="<%= inscription.title || 'Inscription #' + inscription.number %>"
+        loading="lazy"
+        class="opacity-0 transition-opacity duration-300"
+        style="image-rendering: pixelated"
+        data-image-target="img"
+        data-action="load->image#loaded error->image#error"
+      />
+    <% } else { %>
+      <iframe
+        src="<%= inscription.previewUrl %>"
+        class="pointer-events-none opacity-0 transition-opacity duration-300"
+        allow="accelerometer; gyroscope"
+        data-image-target="media"
+        data-action="load->image#loaded error->image#error"
+      ></iframe>
+    <% } %>
+  </div>
+
+  <% if (order && order.status === 'pending') { %>
+    <span class="card-status pending">PENDING</span>
+  <% } else if (order && order.status === 'confirmed') { %>
+    <span class="card-status sold">ACQUIRED</span>
+  <% } else { %>
+    <span class="card-status available">AVAILABLE</span>
+  <% } %>
+
+  <div class="card-info">
+    <h3 class="card-title" data-testid="inscription-title"><%= inscription.title || 'Inscription #' + inscription.number %></h3>
+    <span class="card-price" data-testid="inscription-price"><%= formatSats(collection.price_sats) %></span>
+  </div>
+</a>

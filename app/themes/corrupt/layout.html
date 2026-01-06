@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= title %> // CORRUPT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=IBM+Plex+Mono:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="<%= assets.css %>" />
+    <script type="module" src="<%= assets.js %>"></script>
+  </head>
+  <body
+    data-controller="store body-class usd wallet"
+    data-action="wallet:connected@window->body-class#setConnected wallet:disconnected@window->body-class#setDisconnected keydown.esc@window->wallet#close"
+    class="theme-corrupt"
+  >
+    <!-- Transmission Warning -->
+    <div class="transmission-warning">
+      <span>Signal Degradation Detected</span>
+    </div>
+
+    <!-- Wallet Modal -->
+    <div data-wallet-target="selector" data-state="closed">
+      <div class="wallet-backdrop" data-action="click->wallet#close"></div>
+      <div class="wallet-panel">
+        <div class="wallet-header">
+          <div class="wallet-title">
+            <div class="wallet-title-icon"></div>
+            <span class="wallet-title-text">Establish Connection</span>
+          </div>
+          <button class="wallet-close" type="button" aria-label="Close" data-action="wallet#close">&times;</button>
+        </div>
+        <div class="wallet-body">
+          <div class="wallet-message">
+            <p class="jp-text jp">接続 // CONNECT</p>
+            <p>Select wallet to initiate data transfer</p>
+          </div>
+          <div class="wallet-options">
+            <button class="wallet-option" data-wallet-target="xverse" data-action="wallet#authorize:prevent" data-wallet-provider-param="xverse">
+              <div class="wallet-option-icon">
+                <img src="/wallets/xverse.png" alt="" />
+              </div>
+              <div class="wallet-option-info">
+                <div class="wallet-option-name">Xverse</div>
+                <div class="wallet-option-desc">Multi-platform</div>
+              </div>
+              <span class="wallet-option-arrow">></span>
+            </button>
+            <button class="wallet-option" data-wallet-target="unisat" data-action="wallet#authorize:prevent" data-wallet-provider-param="unisat">
+              <div class="wallet-option-icon">
+                <img src="/wallets/unisat.png" alt="" />
+              </div>
+              <div class="wallet-option-info">
+                <div class="wallet-option-name">Unisat</div>
+                <div class="wallet-option-desc">Ordinals compatible</div>
+              </div>
+              <span class="wallet-option-arrow">></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content" data-store-target="main">
+      <%- body %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" data-testid="footer">
+      <div>
+        <a href="https://github.com/lifofifoX/covenant" target="_blank" rel="noopener" data-testid="footer-blizzard">Covenant</a> // CORRUPT THEME // <%= new Date().getFullYear() %>
+      </div>
+    </footer>
+
+    <!-- Bottom Floating Nav -->
+    <nav class="floating-nav">
+      <div class="nav-status">
+        <div class="nav-status-dot"></div>
+        <span class="nav-status-text">Connection Unstable</span>
+      </div>
+
+      <div class="nav-links">
+        <a href="/" class="nav-link" data-testid="home-link">Home</a>
+        <a href="/activity" class="nav-link" data-testid="nav-activity">Activity</a>
+        <a href="/policy" class="nav-link" data-testid="nav-policy">Protocol</a>
+      </div>
+
+      <div class="control-group wallet-group">
+        <!-- Mobile nav -->
+        <div class="mobile-nav" data-controller="dropdown" data-action="mouseup@window->dropdown#hide" data-testid="nav-menu">
+          <button class="mobile-menu-btn" type="button" aria-label="Menu" data-action="dropdown#toggle" data-testid="nav-menu-button">☰</button>
+          <div class="dropdown-menu hidden" data-dropdown-target="menu" data-testid="nav-menu-list">
+            <a class="dropdown-item" href="/" data-testid="nav-menu-home">HOME</a>
+            <a class="dropdown-item" href="/activity" data-testid="nav-menu-activity">ACTIVITY</a>
+            <a class="dropdown-item" href="/policy" data-testid="nav-menu-policy">PROTOCOL</a>
+          </div>
+        </div>
+        <button class="acquire-btn hide-on-connected" type="button" data-action="wallet#select" style="padding: 10px 20px; font-size: 11px;">CONNECT</button>
+        <div class="show-on-connected" style="position: relative;" data-controller="dropdown" data-action="mouseup@window->dropdown#hide">
+          <button class="acquire-btn" type="button" data-action="dropdown#toggle" style="padding: 10px 20px; font-size: 11px;">
+            <span data-wallet-target="addressPreview"></span>
+          </button>
+          <div class="dropdown-menu hidden" data-dropdown-target="menu">
+            <a class="dropdown-item danger" href="#" data-action="wallet#logout:prevent dropdown#toggle">DISCONNECT</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>

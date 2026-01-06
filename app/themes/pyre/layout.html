@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= title %> // PYRE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="<%= assets.css %>" />
+    <script type="module" src="<%= assets.js %>"></script>
+  </head>
+  <body
+    data-controller="store body-class usd wallet"
+    data-action="wallet:connected@window->body-class#setConnected wallet:disconnected@window->body-class#setDisconnected keydown.esc@window->wallet#close"
+    class="theme-pyre"
+  >
+    <!-- Ember Particles -->
+    <div class="ember" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="ember" style="left: 25%; animation-delay: 2s;"></div>
+    <div class="ember" style="left: 40%; animation-delay: 4s;"></div>
+    <div class="ember" style="left: 55%; animation-delay: 1s;"></div>
+    <div class="ember" style="left: 70%; animation-delay: 3s;"></div>
+    <div class="ember" style="left: 85%; animation-delay: 5s;"></div>
+    <div class="ember" style="left: 95%; animation-delay: 2.5s;"></div>
+
+    <!-- Navigation Trigger (Hamburger) -->
+    <button class="nav-trigger" type="button" onclick="document.getElementById('navOverlay').classList.toggle('active')" aria-label="Menu">
+      <svg class="flame-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L12 12l6.31-4.9C19.37 8.45 20 10.15 20 12c0 4.42-3.58 8-8 8z"/>
+        <path d="M12 5.5c-1.5 0-2.5 1.5-2.5 3.5 0 1.5.5 3 2.5 5 2-2 2.5-3.5 2.5-5 0-2-1-3.5-2.5-3.5z"/>
+      </svg>
+    </button>
+
+    <!-- Navigation Overlay -->
+    <div class="nav-overlay" id="navOverlay">
+      <button class="close-nav" type="button" onclick="document.getElementById('navOverlay').classList.remove('active')" aria-label="Close">&times;</button>
+      <nav>
+        <a href="/" onclick="document.getElementById('navOverlay').classList.remove('active')">HOME</a>
+        <a href="/activity" onclick="document.getElementById('navOverlay').classList.remove('active')">ACTIVITY</a>
+        <a href="/policy" onclick="document.getElementById('navOverlay').classList.remove('active')">POLICY</a>
+      </nav>
+      <div class="nav-japanese">内なる炎 /// 聖なる遺物</div>
+    </div>
+
+    <!-- Wallet Modal -->
+    <div data-wallet-target="selector" data-state="closed">
+      <div class="wallet-backdrop" data-action="click->wallet#close"></div>
+      <div class="wallet-panel">
+        <button class="wallet-close" type="button" aria-label="Close" data-action="wallet#close">&times;</button>
+        <div class="wallet-header">
+          <span class="wallet-lock">🔥</span>
+          <span class="wallet-title">CONNECT WALLET</span>
+        </div>
+        <div class="wallet-body">
+          <button class="wallet-option" data-wallet-target="xverse" data-action="wallet#authorize:prevent" data-wallet-provider-param="xverse">
+            <div class="wallet-icon">
+              <img src="/wallets/xverse.png" alt="" />
+            </div>
+            <div class="wallet-name">XVERSE</div>
+          </button>
+          <button class="wallet-option" data-wallet-target="unisat" data-action="wallet#authorize:prevent" data-wallet-provider-param="unisat">
+            <div class="wallet-icon">
+              <img src="/wallets/unisat.png" alt="" />
+            </div>
+            <div class="wallet-name">UNISAT</div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content" data-store-target="main">
+      <%- body %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" data-testid="footer">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="footer-title">PYRE</span>
+          <span class="footer-jp">聖なる遺物市場</span>
+        </div>
+        <div class="barcode">
+          <div class="barcode-line" style="height: 100%;"></div>
+          <div class="barcode-line" style="height: 70%;"></div>
+          <div class="barcode-line" style="height: 100%;"></div>
+          <div class="barcode-line" style="height: 50%;"></div>
+          <div class="barcode-line" style="height: 100%;"></div>
+          <div class="barcode-line" style="height: 80%;"></div>
+          <div class="barcode-line" style="height: 60%;"></div>
+          <div class="barcode-line" style="height: 100%;"></div>
+          <div class="barcode-line" style="height: 40%;"></div>
+          <div class="barcode-line" style="height: 100%;"></div>
+          <div class="barcode-line" style="height: 90%;"></div>
+          <div class="barcode-line" style="height: 55%;"></div>
+          <div class="barcode-line" style="height: 100%;"></div>
+          <div class="barcode-line" style="height: 75%;"></div>
+          <div class="barcode-line" style="height: 100%;"></div>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/lifofifoX/covenant" target="_blank" rel="noopener" data-testid="footer-blizzard">COVENANT</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+      <div class="nav-group nav-desktop">
+        <a href="/" class="nav-btn" data-testid="home-link">HOME</a>
+        <a href="/activity" class="nav-btn" data-testid="nav-activity">ACTIVITY</a>
+        <a href="/policy" class="nav-btn" data-testid="nav-policy">POLICY</a>
+      </div>
+
+      <div class="nav-group wallet-group">
+        <!-- Mobile nav -->
+        <div class="mobile-nav" data-controller="dropdown" data-action="mouseup@window->dropdown#hide" data-testid="nav-menu">
+          <button class="mobile-menu-btn" type="button" aria-label="Menu" data-action="dropdown#toggle" data-testid="nav-menu-button">
+            MENU
+          </button>
+          <div class="dropdown-menu hidden" data-dropdown-target="menu" data-testid="nav-menu-list">
+            <a class="dropdown-item" href="/" data-testid="nav-menu-home">HOME</a>
+            <a class="dropdown-item" href="/activity" data-testid="nav-menu-activity">ACTIVITY</a>
+            <a class="dropdown-item" href="/policy" data-testid="nav-menu-policy">POLICY</a>
+          </div>
+        </div>
+        <button class="nav-btn hide-on-connected" type="button" data-action="wallet#select">
+          CONNECT WALLET
+        </button>
+        <div class="show-on-connected" style="position: relative;" data-controller="dropdown" data-action="mouseup@window->dropdown#hide">
+          <button class="nav-btn" type="button" data-action="dropdown#toggle">
+            <span data-wallet-target="addressPreview"></span>
+          </button>
+          <div class="dropdown-menu hidden" data-dropdown-target="menu">
+            <a class="dropdown-item danger" href="#" data-action="wallet#logout:prevent dropdown#toggle">DISCONNECT</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <script>
+      // Close nav on escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          document.getElementById('navOverlay').classList.remove('active');
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,71 @@
+<section data-testid="policy-page">
+  <div class="section">
+    <div class="policy-container" data-testid="policy-card">
+      <div class="policy-header">
+        <h2 data-testid="page-title">Protocol</h2>
+        <p class="jp-text jp">契約 // COVENANT</p>
+      </div>
+
+      <div class="policy-block">
+        <div class="policy-block-header">
+          <span class="policy-block-number">01</span>
+          <span class="policy-block-title" data-testid="policy-title">Data Transfer</span>
+        </div>
+        <p>
+          All fragment acquisitions are final and irreversible. Once a transmission is confirmed
+          on the blockchain, ownership transfers permanently. The corrupted data becomes yours
+          to preserve—or let decay further. <span class="corrupted-text">░▒▓ NO_REFUNDS ▓▒░</span>
+        </p>
+      </div>
+
+      <div class="policy-block">
+        <div class="policy-block-header">
+          <span class="policy-block-number">02</span>
+          <span class="policy-block-title">Recovery Process</span>
+        </div>
+        <p>
+          Connect your wallet. Sign the PSBT. The blockchain witnesses the transfer.
+          No intermediaries. No gatekeepers. Just you, the fragment, and the immutable
+          ledger. Some data may be lost in transmission.
+          <span class="corrupted-text">█████ ACCEPT_RISK █████</span>
+        </p>
+      </div>
+
+      <div class="policy-block">
+        <div class="policy-block-header">
+          <span class="policy-block-number">03</span>
+          <span class="policy-block-title">Receiving Address</span>
+        </div>
+        <p>All payments route through the following address. Verify before transmitting.</p>
+        <div class="policy-address">
+          <div class="policy-address-label">Payment Address // Taproot</div>
+          <div class="policy-address-value">
+            <span data-testid="wallet-address-link"><%= walletAddress %></span>
+            <button class="btn-copy" type="button" onclick="navigator.clipboard.writeText('<%= walletAddress %>')">COPY</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="policy-block">
+        <div class="policy-block-header">
+          <span class="policy-block-number">04</span>
+          <span class="policy-block-title">Network Parameters</span>
+        </div>
+        <p>
+          Network: Bitcoin Mainnet<br>
+          Accepted Wallets: Unisat, Xverse<br>
+          Protocol: Ordinals<br>
+          Authenticity: Verified by <%= CONFIG.artist_name %>
+        </p>
+      </div>
+
+      <div class="policy-block">
+        <div class="policy-block-header">
+          <span class="policy-block-number">05</span>
+          <span class="policy-block-title">System Configuration</span>
+        </div>
+        <pre class="policy-yaml" data-testid="policy-pre"><%= policyYaml %></pre>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,50 @@
+<section data-testid="activity-page">
+  <div class="section">
+    <div class="activity-header">
+      <h2 data-testid="page-title">Transaction Log</h2>
+      <p class="jp-text jp">データストリーム</p>
+    </div>
+
+    <% if ((orders ?? []).length === 0) { %>
+      <div class="empty-state" data-testid="empty-state">
+        <p>NO TRANSACTIONS RECORDED // LOG EMPTY</p>
+      </div>
+    <% } else { %>
+      <div class="activity-log" data-testid="orders">
+        <div class="activity-log-header">
+          <span>Index</span>
+          <span>Item</span>
+          <span>Price</span>
+          <span>Status</span>
+          <span>Time</span>
+        </div>
+
+        <% orders.forEach((o, index) => { %>
+          <div class="activity-log-row" data-testid="order-row">
+            <span class="activity-index">#<%= String(index + 1).padStart(3, '0') %></span>
+            <div class="activity-item">
+              <div class="activity-item-thumb"><%= o.inscription_id.substring(0, 2).toUpperCase() %></div>
+              <div class="activity-item-info">
+                <span class="activity-item-name">
+                  <a href="/<%= encodeURIComponent(o.collection_slug) %>/<%= encodeURIComponent(o.inscription_id) %>" data-testid="order-inscription-link">
+                    <%= o.inscription_id.substring(0, 12) %>...
+                  </a>
+                </span>
+                <span class="activity-item-id"><%= o.inscription_id.substring(0, 8) %>...████</span>
+              </div>
+            </div>
+            <span class="activity-price" data-testid="order-price"><%= o.price_sats ? formatSats(o.price_sats).replace(' sats', '') : '---' %></span>
+            <span class="activity-status <%= o.status %>" data-testid="order-status"><%= o.status.toUpperCase() %></span>
+            <span class="activity-time">
+              <% if (o.txid) { %>
+                <a href="https://mempool.space/tx/<%= encodeURIComponent(o.txid) %>" target="_blank" rel="noopener" data-testid="order-tx-link">[TX]</a>
+              <% } else { %>
+                <%= new Date(o.created_at).toLocaleTimeString('en-US', { hour12: false }) %>
+              <% } %>
+            </span>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</section>

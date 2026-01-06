@@ -1,0 +1,44 @@
+<a
+  class="masonry-item"
+  href="/<%= encodeURIComponent(collection.slug) %>/<%= encodeURIComponent(inscription.id) %>"
+  data-testid="inscription-card"
+  data-inscription-id="<%= inscription.id %>"
+>
+  <div class="masonry-image" data-controller="image">
+    <div class="inscription-skeleton" data-image-target="skeleton"></div>
+    <% if (inscription.isImage) { %>
+      <img
+        src="<%= inscription.contentUrl %>"
+        alt="<%= inscription.title || 'Inscription #' + inscription.number %>"
+        loading="lazy"
+        decoding="async"
+        class="opacity-0 transition-opacity duration-300"
+        style="image-rendering: pixelated"
+        data-image-target="img"
+        data-action="load->image#loaded error->image#error"
+      />
+    <% } else { %>
+      <iframe
+        src="<%= inscription.previewUrl %>"
+        class="pointer-events-none opacity-0 transition-opacity duration-300"
+        allow="accelerometer; gyroscope"
+        data-image-target="media"
+        data-action="load->image#loaded error->image#error"
+      ></iframe>
+    <% } %>
+  </div>
+  <div class="masonry-info">
+    <div class="masonry-id">ID: <%= inscription.id.substring(0, 8) %>█████</div>
+    <div class="masonry-title" data-testid="inscription-title"><%= inscription.title || 'Inscription #' + inscription.number %></div>
+    <div class="masonry-price">
+      <span class="masonry-price-value" data-testid="inscription-price"><%= formatSats(collection.price_sats).replace(' sats', '') %> sats</span>
+      <% if (order && order.status === 'pending') { %>
+        <span class="masonry-status pending">Pending</span>
+      <% } else if (order && order.status === 'confirmed') { %>
+        <span class="masonry-status sold">Claimed</span>
+      <% } else { %>
+        <span class="masonry-status available">Live</span>
+      <% } %>
+    </div>
+  </div>
+</a>

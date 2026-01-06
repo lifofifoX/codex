@@ -1,0 +1,46 @@
+<section data-testid="activity-page">
+  <section class="activity-section">
+    <div class="activity-header">
+      <span style="font-family: 'Noto Sans JP', sans-serif; font-size: 0.875rem; color: #737373; letter-spacing: 0.3em; display: block; margin-bottom: 0.5rem;">取引履歴</span>
+      <h2 class="activity-title" data-testid="page-title">ACTIVITY</h2>
+    </div>
+
+    <% if ((orders ?? []).length === 0) { %>
+      <div class="empty-state" data-testid="empty-state">
+        <p>NO TRANSACTIONS RECORDED</p>
+      </div>
+    <% } else { %>
+      <div class="activity-log" data-testid="orders">
+        <% orders.forEach((o) => { %>
+          <div class="activity-entry" data-testid="order-row">
+            <span class="activity-time">[<%= new Date(o.created_at).toLocaleTimeString('en-US', { hour12: false }) %>]</span>
+            <span class="activity-message">
+              <% if (o.status === 'confirmed') { %>
+                CONFIRMED:
+              <% } else if (o.status === 'pending') { %>
+                ACQUISITION:
+              <% } else { %>
+                FAILED:
+              <% } %>
+              <a href="/<%= encodeURIComponent(o.collection_slug) %>/<%= encodeURIComponent(o.inscription_id) %>" data-testid="order-inscription-link">
+                <%= o.inscription_id.substring(0, 12) %>...
+              </a>
+              <% if (o.buyer_address) { %>
+                by <%= o.buyer_address.substring(0, 8) %>...
+              <% } %>
+              <% if (o.price_sats) { %>
+                <span data-testid="order-price">(<%= formatSats(o.price_sats) %>)</span>
+              <% } %>
+              <% if (o.txid) { %>
+                <a href="https://mempool.space/tx/<%= encodeURIComponent(o.txid) %>" target="_blank" rel="noopener" data-testid="order-tx-link" class="tx-link">[TX]</a>
+              <% } %>
+            </span>
+            <span class="activity-status <%= o.status %>" data-testid="order-status">
+              <%= o.status.toUpperCase() %>
+            </span>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </section>
+</section>

@@ -1,0 +1,54 @@
+<div data-testid="order-panel">
+  <% const isPending = order.status === 'pending' %>
+
+  <div class="detail-card">
+    <div style="text-align: center; margin-bottom: 1.5rem;">
+      <span style="font-family: 'Noto Sans JP', sans-serif; font-size: 0.75rem; color: #737373; letter-spacing: 0.3em;"><%= isPending ? '処理中' : '完了' %></span>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; color: #dc2626; transform: scaleY(1.15); margin-top: 0.5rem;"><%= isPending ? 'TRANSACTION PENDING' : 'ACQUISITION COMPLETE' %></h3>
+    </div>
+
+    <div class="message <%= isPending ? 'message-pending' : 'message-success' %>" data-testid="order-banner" style="margin-bottom: 1.5rem;">
+      <div class="message-title"><%= isPending ? 'PROCESSING...' : 'CONFIRMED' %></div>
+    </div>
+
+    <div data-testid="order-details">
+      <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid rgba(64, 64, 64, 0.3); font-size: 0.875rem;">
+        <span style="color: #737373;">STATUS</span>
+        <span style="<%= isPending ? 'color: #FFAA00;' : 'color: #dc2626;' %>">
+          <% if (isPending) { %>
+            <span class="button-spinner" style="width: 12px; height: 12px; border-width: 1px; display: inline-block; vertical-align: middle; margin-right: 8px;"></span>
+          <% } %>
+          <%= order.status.toUpperCase() %>
+        </span>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid rgba(64, 64, 64, 0.3); font-size: 0.875rem;">
+        <span style="color: #737373;">PRICE</span>
+        <span style="color: #e5e5e5;"><%= formatSats(order.price_sats) %></span>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid rgba(64, 64, 64, 0.3); font-size: 0.875rem;">
+        <span style="color: #737373;">BUYER</span>
+        <span style="color: #e5e5e5;"><%= order.buyer_address.substring(0, 16) %>...</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid rgba(64, 64, 64, 0.3); font-size: 0.875rem;">
+        <span style="color: #737373;">TX</span>
+        <span style="color: #e5e5e5;">
+          <a href="https://mempool.space/tx/<%= order.txid %>" target="_blank" rel="noopener" style="color: #dc2626; text-decoration: none;"><%= order.txid.substring(0, 16) %>...</a>
+        </span>
+      </div>
+    </div>
+
+    <% const extra = JSON.parse(order.extra_details || '{}') %>
+    <% const optionalPayments = extra.optional_payments || [] %>
+    <% if (optionalPayments.length > 0) { %>
+      <div style="margin-top: 1.5rem;" data-testid="order-optional-payments">
+        <div style="color: #dc2626; font-family: 'Playfair Display', serif; font-size: 0.875rem; letter-spacing: 0.1em; margin-bottom: 0.75rem;">ADDITIONAL PAYMENTS</div>
+        <% optionalPayments.forEach((p) => { %>
+          <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.75rem;">
+            <span style="color: #737373;"><%= p.title.toUpperCase() %></span>
+            <span style="color: #e5e5e5;"><%= formatSats(p.amount) %></span>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</div>

@@ -1,0 +1,55 @@
+<section data-testid="policy-page">
+  <section class="policy-section">
+    <div class="policy-container">
+      <div class="policy-header">
+        <span class="policy-subtitle">聖なる契約</span>
+        <h2 class="policy-title" data-testid="page-title">SACRED POLICY</h2>
+      </div>
+
+      <div class="sacred-document" data-testid="policy-card">
+        <div class="doc-section">
+          <div class="doc-section-title">I. Payment Protocol</div>
+          <div class="doc-text" data-testid="policy-title">
+            All payments are processed to the following designated address:
+          </div>
+          <div class="wallet-address">
+            <span data-testid="wallet-address-link"><%= walletAddress %></span>
+            <button class="btn-copy" type="button" onclick="navigator.clipboard.writeText('<%= walletAddress %>')">COPY</button>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <div class="doc-section-title">II. Terms of the Covenant</div>
+          <div class="doc-text">
+            - All sales are FINAL. No refunds after transaction broadcast.<br>
+            - Buyer assumes custody upon blockchain confirmation.<br>
+            - This marketplace operates as a direct-sale platform for Bitcoin inscriptions.<br>
+            - All transactions are executed via Partially Signed Bitcoin Transactions (PSBTs).
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <div class="doc-section-title">III. Authenticity Verification</div>
+          <div class="doc-text">
+            Each inscription sold through this marketplace is verified to be owned by
+            <%= CONFIG.artist_name %>. Provenance is guaranteed through on-chain verification.
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <div class="doc-section-title">IV. Network Parameters</div>
+          <div class="doc-text">
+            Network: Bitcoin Mainnet<br>
+            Accepted Wallets: Unisat, Xverse<br>
+            Protocol: Ordinals
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <div class="doc-section-title">V. System Configuration</div>
+          <pre class="policy-yaml" data-testid="policy-pre"><%= policyYaml %></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>
