@@ -1,0 +1,183 @@
+<section
+  data-testid="inscription-page"
+  data-controller="inscription"
+  data-action="wallet:connected@window->inscription#onWalletConnected wallet:disconnected@window->inscription#onWalletDisconnected"
+  data-inscription-price-value="<%= checkout.priceSats %>"
+  data-inscription-inscription-metadata-value="<%= JSON.stringify(inscription.metadata) %>"
+  data-inscription-payment-address-value="<%= config.payment_address %>"
+>
+  <div class="detail-layout">
+    <!-- Left: Media -->
+    <div class="detail-media">
+      <div class="inscription-frame" data-testid="media" data-controller="image">
+        <div class="inscription-skeleton" data-image-target="skeleton"></div>
+        <% if (inscription.isImage) { %>
+          <img
+            src="<%= inscription.contentUrl %>"
+            alt="<%= title %>"
+            loading="eager"
+            decoding="async"
+            style="image-rendering: pixelated"
+            data-image-target="img"
+            data-action="load->image#loaded error->image#error"
+            data-testid="inscription-media-img"
+          />
+        <% } else { %>
+          <iframe
+            src="<%= inscription.previewUrl %>"
+            allow="accelerometer; gyroscope"
+            data-image-target="media"
+            data-action="load->image#loaded error->image#error"
+            data-testid="inscription-media-iframe"
+            style="width: 100%; aspect-ratio: 1; border: none;"
+          ></iframe>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Right: Sidebar -->
+    <div class="detail-sidebar">
+      <h1 class="inscription-title" data-testid="page-title"><%= title %></h1>
+
+      <div style="font-family: 'Comic Neue', cursive; font-size: 16px; color: #00FFFF; margin-bottom: 20px;">
+        From: <a href="/<%= encodeURIComponent(config.slug) %>" style="color: #FFFF00; animation: rainbow-text 3s infinite;"><%= config.title %></a>
+      </div>
+
+      <!-- Details -->
+      <div class="inscription-details" data-testid="details">
+        <div class="detail-row" data-testid="detail-id">
+          <span class="detail-label">Inscription ID:</span>
+          <span class="detail-value">
+            <a href="https://ordinals.com/inscription/<%= encodeURIComponent(inscription.id) %>" target="_blank" rel="noopener" data-testid="detail-id-link"><%= inscription.id.substring(0, 16) %>...</a>
+          </span>
+        </div>
+        <div class="detail-row" data-testid="detail-number">
+          <span class="detail-label">Inscription #:</span>
+          <span class="detail-value">
+            <a href="https://ordinals.com/inscription/<%= encodeURIComponent(inscription.id) %>" target="_blank" rel="noopener" data-testid="detail-number-link"><%= new Intl.NumberFormat('en-US').format(inscription.number) %></a>
+          </span>
+        </div>
+        <div class="detail-row" data-testid="detail-sat">
+          <span class="detail-label">Sat:</span>
+          <span class="detail-value">
+            <a href="https://ordinals.com/sat/<%= encodeURIComponent(inscription.sat) %>" target="_blank" rel="noopener" data-testid="detail-sat-link"><%= inscription.sat %></a>
+          </span>
+        </div>
+        <% if (inscription.charmIcons.length > 0) { %>
+          <div class="detail-row" data-testid="detail-charms">
+            <span class="detail-label">Charms:</span>
+            <span class="detail-value" data-testid="detail-charms-icons" style="font-size: 18px;">
+              <% inscription.charmIcons.forEach((icon) => { %>
+                <span><%= icon %></span>
+              <% }) %>
+            </span>
+          </div>
+        <% } %>
+        <% if (inscription.parents.length > 0) { %>
+          <div class="detail-row" data-testid="detail-parents">
+            <span class="detail-label">Parents:</span>
+            <span class="detail-value" data-testid="detail-parents-list">
+              <% inscription.parents.forEach((parentId) => { %>
+                <a href="https://ordinals.com/inscription/<%= encodeURIComponent(parentId) %>" target="_blank" rel="noopener" title="<%= parentId %>" data-testid="detail-parent-link"><%= parentId.substring(0, 12) %>...</a>
+              <% }) %>
+            </span>
+          </div>
+        <% } %>
+        <div class="detail-row" data-testid="detail-inscribed">
+          <span class="detail-label">Created:</span>
+          <% const inscribedHuman = new Date(inscription.timestamp * 1000).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' }) %>
+          <span class="detail-value" data-testid="detail-inscribed-value"><%= inscribedHuman %></span>
+        </div>
+      </div>
+
+      <div class="rainbow-divider"></div>
+
+      <!-- Purchase Section -->
+      <% if (order.status === 'pending' || order.status === 'confirmed') { %>
+        <%- include('partials/order', { order }) %>
+      <% } else { %>
+        <div data-testid="purchase-panel">
+          <!-- Price Display -->
+          <div class="price-display">
+            <div class="price-label">PRICE 4 THIS ITEM!!!</div>
+            <span class="price-amount" data-testid="price-sats"><%= formatSats(checkout.priceSats).replace(' sats', '') %></span>
+            <div style="display: none;" data-usd-sats="<%= checkout.priceSats %>"></div>
+          </div>
+
+          <form method="post" data-testid="buy-form" data-inscription-target="form" style="margin-top: 20px;">
+            <% if ((config.optional_payments ?? []).length > 0) { %>
+              <div class="optional-payments" data-testid="optional-payments">
+                <div class="optional-payments-label">*** EXTRA OPTIONS ***</div>
+                <% config.optional_payments.forEach((payment, index) => { %>
+                  <label class="optional-payment" data-testid="optional-payment">
+                    <input type="checkbox" data-inscription-target="optionalPayment" data-payment='<%= JSON.stringify(payment) %>' data-action="inscription#calculateCost" />
+                    <div class="optional-payment-title"><%= payment.title %></div>
+                    <span class="optional-payment-amount"><%= formatSats(payment.amount) %></span>
+                    <div class="optional-payment-desc"><%= payment.description %></div>
+                  </label>
+                <% }) %>
+              </div>
+            <% } %>
+
+            <div class="fees-section" data-testid="fees" data-inscription-target="fees">
+              <div class="fee-row">
+                <span class="label">Network Fee:</span>
+                <span class="value" data-inscription-target="fee">-</span>
+              </div>
+              <div class="fee-row">
+                <span class="label">Fee Rate:</span>
+                <span class="value" data-inscription-target="feeRate">-</span>
+              </div>
+              <div class="fee-row total">
+                <span class="label">TOTAL:</span>
+                <span class="value" data-inscription-target="total">-</span>
+              </div>
+            </div>
+
+            <div style="margin-top: 20px;">
+              <button
+                class="buy-button hide-on-connected"
+                type="button"
+                data-inscription-target="connectButton"
+                data-action="wallet#select"
+              >
+                🔌 CONNECT WALLET 2 BUY!!!
+              </button>
+
+              <button
+                class="buy-button show-on-connected"
+                type="button"
+                data-inscription-target="prepareButton"
+                data-action="click->inscription#prepare"
+              >
+                <span data-inscription-target="prepareSpinner" style="display: none;"></span>
+                <span data-inscription-target="prepareLabel">🛒 BUY NOW!!!</span>
+              </button>
+
+              <button
+                class="buy-button hidden"
+                type="button"
+                data-testid="buy-button"
+                data-inscription-target="buyButton"
+                data-action="click->inscription#buy"
+              >
+                <span data-inscription-target="buySpinner" style="display: none;"></span>
+                <span data-inscription-target="buyLabel">💰 CONFIRM PURCHASE!!! 💰</span>
+              </button>
+            </div>
+          </form>
+
+          <div class="message message-success" style="display: none;" data-inscription-target="successPanel" data-testid="buy-success">
+            <div class="message-title">🎉🎉🎉 CONGRATS!!! 🎉🎉🎉</div>
+            <a class="message-link" target="_blank" rel="noopener" data-inscription-target="successLink" href="">View transaction on mempool.space</a>
+          </div>
+
+          <div class="message message-error" style="display: none;" data-inscription-target="errorPanel" data-testid="buy-client-error">
+            <div class="message-title">💀💀💀 ERROR!!! 💀💀💀</div>
+            <div class="message-link" data-inscription-target="errorMessage"></div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</section>

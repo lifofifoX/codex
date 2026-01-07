@@ -1,0 +1,83 @@
+<section data-testid="home-page">
+  <!-- MIDI BANNER -->
+  <div style="background: linear-gradient(45deg, #000000, #330033); border: 5px double #FF00FF; padding: 15px; margin: 20px; text-align: center; animation: disco-floor 6s infinite;">
+    <span style="font-family: 'Comic Neue', cursive; font-size: 20px; font-weight: bold; color: #FFFFFF; animation: blink-slow 1s infinite;">🔊 IF MIDI WAS STILL A THING, "SANDSTORM" WOULD BE PLAYING RIGHT NOW 🔊</span>
+  </div>
+
+  <!-- WELCOME SECTION -->
+  <div style="background: linear-gradient(135deg, #FFD700, #FFA500, #FF6600, #FFD700); border: 15px ridge gold; padding: 30px; margin: 30px auto; max-width: 900px; position: relative; transform: rotate(-1deg); box-shadow: 0 0 0 5px #000000, 0 0 0 10px #FFD700, 0 0 0 15px #000000, 10px 10px 30px rgba(0,0,0,0.5);">
+    <h2 style="font-family: 'Bungee', cursive; font-size: 42px; text-align: center; color: #FF0000; text-shadow: 3px 3px 0 #FFFF00, -3px -3px 0 #00FFFF; animation: wobble 0.3s ease-in-out infinite; margin-bottom: 20px;">WeLcOmE 2 My HoMePaGe!!!</h2>
+    <div style="font-family: 'Comic Neue', cursive; font-size: 22px; color: #000080; text-align: center; line-height: 2; background: rgba(255,255,255,0.8); padding: 20px; border: 3px dashed #FF00FF;" data-testid="artist-about">
+      <% if (artist.about) { %>
+        <%= artist.about %>
+      <% } else { %>
+        HeY tHeRe FrIeNd!!! 👋 ThIs Is My <span style="animation: blink-slow 1.5s infinite; color: #FF0000; font-weight: bold;">AWESOME</span> wEbSiTe WhErE i SeLl
+        <span style="animation: blink-slow 1.5s infinite; color: #FF0000; font-weight: bold;">SUPER RARE</span> BiTcOiN iNsCrIpTiOnS!!!
+      <% } %>
+    </div>
+    <% if (artist.socials.websiteUrl || artist.socials.xUrl || artist.socials.githubUrl) { %>
+      <div style="text-align: center; margin-top: 20px;" data-testid="artist-social">
+        <% if (artist.socials.websiteUrl) { %>
+          <a href="<%= artist.socials.websiteUrl %>" target="_blank" rel="noopener" style="font-family: 'Bangers', cursive; font-size: 20px; color: #0000FF; margin: 0 10px; animation: rainbow-text 2s infinite;" data-testid="artist-social-website">🌐 WEBSITE</a>
+        <% } %>
+        <% if (artist.socials.xUrl) { %>
+          <a href="<%= artist.socials.xUrl %>" target="_blank" rel="noopener" style="font-family: 'Bangers', cursive; font-size: 20px; color: #0000FF; margin: 0 10px; animation: rainbow-text 2s infinite;" data-testid="artist-social-x">𝕏 TWITTER</a>
+        <% } %>
+        <% if (artist.socials.githubUrl) { %>
+          <a href="<%= artist.socials.githubUrl %>" target="_blank" rel="noopener" style="font-family: 'Bangers', cursive; font-size: 20px; color: #0000FF; margin: 0 10px; animation: rainbow-text 2s infinite;" data-testid="artist-social-github">🐙 GITHUB</a>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- COLLECTIONS SECTION -->
+  <div style="margin: 40px 20px;">
+    <h2 class="section-title">~*~ MY KEWL COLLECTIONS ~*~</h2>
+
+    <% if ((collections ?? []).length === 0) { %>
+      <div style="background: #000000; border: 5px ridge #FF0000; padding: 30px; text-align: center;">
+        <p style="font-family: 'Press Start 2P', monospace; font-size: 14px; color: #FF0000; animation: blink-slow 1s infinite;">NO COLLECTIONS AVAILABLE!!! CHECK BACK L8R!!!</p>
+      </div>
+    <% } else { %>
+      <div class="collections-grid" data-testid="collections-grid">
+        <% (collections ?? []).forEach((collection, index) => { %>
+          <a
+            class="collection-card"
+            href="/<%= encodeURIComponent(collection.slug) %>"
+            data-testid="collection-card"
+            data-collection-slug="<%= collection.slug %>"
+          >
+            <span class="badge"><%= index === 0 ? 'HOT!!!' : (index === 1 ? 'NEW!!!' : 'RARE!!!') %></span>
+            <div class="image-frame" data-controller="image">
+              <div class="inscription-skeleton" data-image-target="skeleton"></div>
+              <% if (collection.thumbnail.isImage) { %>
+                <img
+                  src="<%= collection.thumbnail.contentUrl %>"
+                  alt="<%= collection.title %>"
+                  loading="lazy"
+                  decoding="async"
+                  style="image-rendering: pixelated"
+                  data-image-target="img"
+                  data-action="load->image#loaded error->image#error"
+                  data-testid="collection-thumb"
+                />
+              <% } else { %>
+                <iframe
+                  src="<%= collection.thumbnail.previewUrl %>"
+                  loading="lazy"
+                  allow="accelerometer; gyroscope"
+                  data-image-target="media"
+                  data-action="load->image#loaded error->image#error"
+                  data-testid="collection-thumb"
+                ></iframe>
+              <% } %>
+            </div>
+            <h3 class="card-title" data-testid="collection-title">***<%= collection.title.toUpperCase() %>***</h3>
+            <p class="card-info"><%= collection.availableCount %> ITEMS AVAILABLE!!!</p>
+            <div class="price-tag" data-testid="collection-price"><%= formatSats(collection.priceSats).replace(' sats', '') %></div>
+          </a>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</section>

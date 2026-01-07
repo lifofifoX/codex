@@ -1,0 +1,64 @@
+<section data-testid="policy-page">
+  <h2 class="policy-title" data-testid="page-title">📜 OFFICIAL POLICY 📜</h2>
+
+  <div class="policy-container" data-testid="policy-card">
+    <div class="policy-section">
+      <h3>PAYMENT ADDRESS</h3>
+      <p>All payments go to this <span class="important">TOTALLY LEGITIMATE</span> Bitcoin address:</p>
+
+      <div class="wallet-address-box">
+        <span class="wallet-address" data-testid="wallet-address-link"><%= walletAddress %></span>
+        <button class="btn-copy" type="button" onclick="navigator.clipboard.writeText('<%= walletAddress %>')">COPY!!!</button>
+      </div>
+    </div>
+
+    <div class="policy-section">
+      <h3>TERMS OF SALE</h3>
+      <p>
+        By purchasing inscriptions from this <span class="important">AWESOME</span> marketplace,
+        you agree to the following terms. All sales are <span class="important">FINAL</span>!!!
+        No refunds, no exchanges, no complaining!!!
+      </p>
+    </div>
+
+    <div class="policy-section">
+      <h3>AUTHENTICITY</h3>
+      <p>
+        Each inscription sold through this marketplace is verified to be owned by
+        <span class="important"><%= CONFIG.artist_name %></span>.
+        Provenance is guaranteed through on-chain verification.
+        <span class="important">100% LEGIT!!!</span>
+      </p>
+    </div>
+
+    <div class="policy-section">
+      <h3>NETWORK INFO</h3>
+      <p>
+        Network: <span class="important">Bitcoin Mainnet</span><br/>
+        Accepted Wallets: Unisat, Xverse<br/>
+        <span class="important">NO FAKE MONEY!!!</span>
+      </p>
+    </div>
+
+    <div class="policy-section">
+      <h3>SHIPPING</h3>
+      <p>
+        These are <span class="important">DIGITAL ITEMS</span>!!!
+        They get delivered to your Bitcoin wallet <span class="important">INSTANTLY</span>!!!
+        No waiting, no tracking numbers, just pure digital magic!!!
+      </p>
+    </div>
+
+    <div class="policy-section">
+      <h3>CONFIGURATION</h3>
+      <pre class="policy-yaml" data-testid="policy-pre"><%= policyYaml %></pre>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+      <div style="display: inline-block; width: 100px; height: 100px; background: radial-gradient(circle, #FFD700, #B8860B); border-radius: 50%; border: 5px ridge gold; line-height: 100px; font-size: 50px; animation: spin 10s linear infinite; box-shadow: 0 0 20px #FFD700;">✓</div>
+      <p style="font-family: 'Comic Neue', cursive; color: #8B4513; margin-top: 10px;">
+        CERTIFIED LEGIT SINCE 1996
+      </p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,1418 @@
+@import "tailwindcss";
+
+@source "../../themes/**/*.html";
+@source "../../../app/assets/javascripts/**/*.js";
+
+@theme {
+  --color-hot-pink: #FF00FF;
+  --color-electric-lime: #00FF00;
+  --color-cyber-cyan: #00FFFF;
+  --color-screaming-yellow: #FFFF00;
+  --color-blood-red: #FF0000;
+  --color-neon-orange: #FF6600;
+  --color-deep-blue: #0000FF;
+  --font-comic: 'Comic Neue', cursive;
+  --font-bangers: 'Bangers', cursive;
+  --font-bungee: 'Bungee', cursive;
+  --font-creepster: 'Creepster', cursive;
+  --font-pacifico: 'Pacifico', cursive;
+  --font-press-start: 'Press Start 2P', monospace;
+}
+
+/* ============================================
+   GEOCITIES HELLSCAPE - VISUAL WARFARE
+   DNA: H9-L9-G8-D6-C8-N9
+   THIS IS INTENTIONALLY HORRIBLE
+   ============================================ */
+
+/* ANIMATIONS */
+@keyframes rainbow-bg {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes star-twinkle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.5); }
+}
+
+@keyframes blink-slow {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes blink-fast {
+  0%, 30% { opacity: 1; }
+  31%, 60% { opacity: 0; }
+  61%, 100% { opacity: 1; }
+}
+
+@keyframes blink-erratic {
+  0% { opacity: 1; }
+  15% { opacity: 0; }
+  30% { opacity: 1; }
+  45% { opacity: 0; }
+  60% { opacity: 1; }
+  75% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+@keyframes marquee-left {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes marquee-right {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes bounce-horizontal {
+  0%, 100% { transform: translateX(-50%); }
+  50% { transform: translateX(50%); }
+}
+
+@keyframes rainbow-text {
+  0% { color: #FF0000; }
+  14% { color: #FF6600; }
+  28% { color: #FFFF00; }
+  42% { color: #00FF00; }
+  57% { color: #00FFFF; }
+  71% { color: #0000FF; }
+  85% { color: #FF00FF; }
+  100% { color: #FF0000; }
+}
+
+@keyframes fire-flicker {
+  0%, 100% { box-shadow: 0 0 10px #FF0000, 0 0 20px #FF6600, 0 0 30px #FFFF00; }
+  25% { box-shadow: 0 0 15px #FF6600, 0 0 25px #FF0000, 0 0 35px #FFFF00; }
+  50% { box-shadow: 0 0 20px #FFFF00, 0 0 30px #FF0000, 0 0 40px #FF6600; }
+  75% { box-shadow: 0 0 12px #FF0000, 0 0 22px #FFFF00, 0 0 32px #FF6600; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin-reverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  10% { transform: translate(-5px, -5px) rotate(-2deg); }
+  20% { transform: translate(5px, -5px) rotate(2deg); }
+  30% { transform: translate(-5px, 5px) rotate(-2deg); }
+  40% { transform: translate(5px, 5px) rotate(2deg); }
+  50% { transform: translate(-3px, -3px) rotate(-1deg); }
+  60% { transform: translate(3px, -3px) rotate(1deg); }
+  70% { transform: translate(-3px, 3px) rotate(-1deg); }
+  80% { transform: translate(3px, 3px) rotate(1deg); }
+  90% { transform: translate(-1px, -1px) rotate(0deg); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { text-shadow: 0 0 5px currentColor, 0 0 10px currentColor; transform: scale(1); }
+  50% { text-shadow: 0 0 20px currentColor, 0 0 40px currentColor, 0 0 60px currentColor; transform: scale(1.05); }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1) rotate(180deg); }
+}
+
+@keyframes wobble {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+@keyframes construction-worker {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(-1); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes gradient-shift {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+@keyframes disco-floor {
+  0% { background-color: #FF0000; }
+  16% { background-color: #FF6600; }
+  33% { background-color: #FFFF00; }
+  50% { background-color: #00FF00; }
+  66% { background-color: #00FFFF; }
+  83% { background-color: #FF00FF; }
+  100% { background-color: #FF0000; }
+}
+
+/* CONNECTION STATE */
+.theme-geocities-hellscape .show-on-connected { display: none !important; }
+.theme-geocities-hellscape.connected .hide-on-connected { display: none !important; }
+.theme-geocities-hellscape.connected .show-on-connected { display: block !important; }
+.theme-geocities-hellscape .hide-on-connected { display: block; }
+
+/* Button visibility overrides - ensure JS class changes work */
+.theme-geocities-hellscape .buy-button.hidden { display: none !important; }
+.theme-geocities-hellscape .buy-button.inline-flex { display: inline-flex !important; }
+
+/* BASE BODY STYLES */
+.theme-geocities-hellscape {
+  margin: 0;
+  padding: 0;
+  font-family: 'Comic Neue', cursive;
+  background:
+    repeating-linear-gradient(45deg, #000033 0px, #000033 10px, #000066 10px, #000066 20px),
+    linear-gradient(90deg, #FF0000, #FF6600, #FFFF00, #00FF00, #00FFFF, #0000FF, #FF00FF, #FF0000);
+  background-size: 40px 40px, 400% 400%;
+  animation: rainbow-bg 8s ease infinite;
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text y="24" font-size="24">✨</text></svg>'), auto;
+}
+
+.theme-geocities-hellscape::before {
+  content: "★ ✦ ★ ✧ ★ ✦ ★ ✧ ★ ✦ ★ ✧ ★ ✦ ★ ✧";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 30px;
+  color: #FFFF00;
+  pointer-events: none;
+  z-index: 0;
+  animation: star-twinkle 3s ease-in-out infinite;
+  word-spacing: 50px;
+  line-height: 100px;
+  opacity: 0.5;
+}
+
+/* MARQUEE BARS */
+.marquee-top {
+  background: linear-gradient(90deg, #FF0000, #FF6600, #FFFF00, #00FF00, #00FFFF, #FF00FF);
+  padding: 8px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  border-bottom: 5px dashed #FFFF00;
+  position: relative;
+  z-index: 100;
+}
+
+.marquee-top .marquee-content {
+  display: inline-block;
+  animation: marquee-left 20s linear infinite;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  color: #000000;
+  text-shadow: 2px 2px 0 #FFFFFF;
+}
+
+.marquee-middle {
+  background: linear-gradient(90deg, #FF00FF, #00FFFF, #00FF00, #FFFF00, #FF6600, #FF0000);
+  padding: 5px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  border-top: 3px dotted #00FF00;
+  border-bottom: 3px dotted #00FF00;
+}
+
+.marquee-middle .marquee-content {
+  display: inline-block;
+  animation: marquee-right 16s linear infinite;
+  font-family: 'Bangers', cursive;
+  font-size: 18px;
+  color: #FFFFFF;
+  text-shadow: 3px 3px 0 #FF0000, -3px -3px 0 #0000FF;
+}
+
+/* HEADER */
+.geo-header {
+  background: linear-gradient(135deg, #FF0000 0%, #FF6600 25%, #FFFF00 50%, #00FF00 75%, #00FFFF 100%);
+  padding: 20px;
+  transform: skewY(-2deg);
+  border: 10px ridge gold;
+  margin: 20px;
+  position: relative;
+  z-index: 10;
+  animation: fire-flicker 1.5s infinite, shake 5s infinite;
+}
+
+.geo-header::before {
+  content: "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥";
+  position: absolute;
+  top: -30px;
+  left: 0;
+  right: 0;
+  font-size: 24px;
+  animation: pulse-glow 1s infinite;
+}
+
+.geo-header::after {
+  content: "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥";
+  position: absolute;
+  bottom: -30px;
+  left: 0;
+  right: 0;
+  font-size: 24px;
+  animation: pulse-glow 1s infinite;
+}
+
+.site-title {
+  font-family: 'Bungee', cursive;
+  font-size: 48px;
+  text-align: center;
+  animation: rainbow-text 3s linear infinite, wobble 2s ease-in-out infinite;
+  text-shadow: 5px 5px 0 #FF0000, -5px -5px 0 #00FF00, 10px 10px 0 #0000FF, -10px 10px 0 #FF00FF;
+  transform: skewY(2deg);
+  margin: 0;
+}
+
+.site-title span { display: inline-block; }
+.site-title span:nth-child(odd) { animation: bounce 1.5s ease-in-out infinite; color: #FF00FF; }
+.site-title span:nth-child(even) { animation: bounce 0.5s ease-in-out infinite 0.25s; color: #00FFFF; }
+
+/* VISITOR COUNTER */
+.visitor-counter {
+  background: #000000;
+  border: 8px ridge silver;
+  padding: 15px 30px;
+  margin: 20px auto;
+  display: inline-block;
+  font-family: 'Press Start 2P', monospace;
+  animation: blink-erratic 3s infinite;
+}
+
+.visitor-counter .label {
+  color: #00FF00;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 10px;
+  animation: rainbow-text 2s linear infinite;
+}
+
+.visitor-counter .number {
+  color: #FF0000;
+  font-size: 36px;
+  text-shadow: 0 0 10px #FF0000, 0 0 20px #FF0000;
+  letter-spacing: 5px;
+  animation: pulse-glow 1.5s infinite;
+}
+
+/* NAVIGATION */
+.geo-nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 20px;
+  background: linear-gradient(180deg, #000066, #660066, #006600);
+  border: 5px outset #FFFF00;
+  margin: 10px;
+}
+
+.geo-nav a {
+  padding: 15px 25px;
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-block;
+  border: 4px outset;
+  animation: wobble 2s ease-in-out infinite;
+}
+
+.geo-nav a:nth-child(1) { font-family: 'Comic Neue', cursive; background: #FF0000; color: #FFFF00; border-color: #FF6600; transform: rotate(-5deg); }
+.geo-nav a:nth-child(2) { font-family: 'Bangers', cursive; background: #00FF00; color: #FF00FF; border-color: #00FFFF; transform: rotate(3deg); }
+.geo-nav a:nth-child(3) { font-family: 'Creepster', cursive; background: #0000FF; color: #FFFF00; border-color: #FF0000; transform: rotate(-3deg); }
+.geo-nav a:nth-child(4) { font-family: 'Pacifico', cursive; background: #FF00FF; color: #00FF00; border-color: #FFFF00; transform: rotate(5deg); }
+.geo-nav a:nth-child(5) { font-family: 'Press Start 2P', monospace; font-size: 10px; background: #FFFF00; color: #FF0000; border-color: #00FF00; transform: rotate(-2deg); }
+
+.geo-nav a:hover {
+  animation: shake 0.8s infinite, fire-flicker 0.3s infinite;
+  transform: scale(1.2) rotate(10deg);
+}
+
+/* UNDER CONSTRUCTION */
+.under-construction {
+  background: repeating-linear-gradient(45deg, #FFFF00, #FFFF00 20px, #000000 20px, #000000 40px);
+  padding: 20px;
+  margin: 20px;
+  border: 5px solid #FF0000;
+  text-align: center;
+}
+
+.construction-icon { font-size: 60px; display: inline-block; animation: construction-worker 1s ease-in-out infinite; }
+.construction-text { font-family: 'Bangers', cursive; font-size: 36px; color: #FF0000; text-shadow: 3px 3px 0 #FFFFFF; animation: blink-fast 1.5s infinite; }
+
+/* SECTION TITLES */
+.section-title {
+  font-family: 'Creepster', cursive;
+  font-size: 48px;
+  text-align: center;
+  color: #00FF00;
+  text-shadow: 5px 5px 0 #FF0000, -5px -5px 0 #0000FF, 0 0 30px #00FF00;
+  animation: rainbow-text 2s linear infinite, shake 3s infinite;
+  margin-bottom: 30px;
+}
+
+/* COLLECTION CARDS */
+.collections-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  padding: 20px;
+}
+
+.collection-card {
+  width: 300px;
+  background: linear-gradient(45deg, #330033, #003333, #333300);
+  border: 8px ridge;
+  padding: 20px;
+  position: relative;
+  animation: wobble 2s ease-in-out infinite;
+  text-decoration: none;
+}
+
+.collection-card:nth-child(3n+1) { border-color: #FF0000; transform: rotate(-5deg); }
+.collection-card:nth-child(3n+2) { border-color: #00FF00; transform: rotate(3deg); }
+.collection-card:nth-child(3n+3) { border-color: #0000FF; transform: rotate(-2deg); }
+
+.collection-card:hover { animation: spin 0.5s ease-in-out, shake 0.3s infinite; }
+
+.collection-card .badge {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  background: #FF0000;
+  color: #FFFF00;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  padding: 8px 12px;
+  transform: rotate(15deg);
+  animation: blink-fast 0.3s infinite, pulse-glow 0.5s infinite;
+  border: 3px solid #FFFF00;
+  z-index: 10;
+}
+
+.collection-card .image-frame {
+  border: 10px ridge gold;
+  background: #000000;
+  padding: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.collection-card .image-frame::before {
+  content: "✨";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 20px;
+  animation: spin 5s linear infinite;
+  z-index: 5;
+}
+
+.collection-card .image-frame::after {
+  content: "✨";
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  font-size: 20px;
+  animation: spin-reverse 5s linear infinite;
+  z-index: 5;
+}
+
+.collection-card .image-frame img,
+.collection-card .image-frame iframe {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border: 3px solid #FF00FF;
+  animation: gradient-shift 5s linear infinite;
+  display: block;
+}
+
+.collection-card .card-title {
+  font-family: 'Bangers', cursive;
+  font-size: 28px;
+  color: #FFFF00;
+  text-align: center;
+  text-shadow: 3px 3px 0 #FF0000;
+  margin: 15px 0 10px;
+  animation: rainbow-text 1.5s linear infinite;
+}
+
+.collection-card .card-info {
+  font-family: 'Comic Neue', cursive;
+  color: #00FFFF;
+  text-align: center;
+  font-size: 16px;
+}
+
+.collection-card .price-tag {
+  background: linear-gradient(45deg, #FFD700, #FFA500);
+  color: #000000;
+  font-family: 'Bungee', cursive;
+  font-size: 24px;
+  padding: 10px 20px;
+  margin-top: 15px;
+  text-align: center;
+  border: 4px double #FF0000;
+  animation: pulse-glow 0.5s infinite, blink-erratic 2s infinite;
+  transform: rotate(-3deg);
+}
+
+/* INSCRIPTION GRID */
+.inscription-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 30px;
+  padding: 20px;
+}
+
+.inscription-card {
+  background: linear-gradient(45deg, #1a1a2e, #16213e);
+  border: 6px ridge;
+  padding: 15px;
+  position: relative;
+  text-decoration: none;
+}
+
+.inscription-card:nth-child(6n+1) { border-color: #FF0000; transform: rotate(-3deg); }
+.inscription-card:nth-child(6n+2) { border-color: #FF6600; transform: rotate(2deg); }
+.inscription-card:nth-child(6n+3) { border-color: #FFFF00; transform: rotate(-2deg); }
+.inscription-card:nth-child(6n+4) { border-color: #00FF00; transform: rotate(4deg); }
+.inscription-card:nth-child(6n+5) { border-color: #00FFFF; transform: rotate(-4deg); }
+.inscription-card:nth-child(6n+6) { border-color: #FF00FF; transform: rotate(3deg); }
+
+.inscription-card:hover { animation: shake 1s infinite; z-index: 10; }
+
+.inscription-card .inscription-image {
+  border: 5px ridge silver;
+  overflow: hidden;
+  position: relative;
+}
+
+.inscription-card .inscription-image img,
+.inscription-card .inscription-image iframe {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.inscription-card:hover .inscription-image img,
+.inscription-card:hover .inscription-image iframe {
+  animation: spin 3s linear;
+}
+
+.inscription-card .inscription-info {
+  padding: 10px 0 0;
+}
+
+.inscription-card .inscription-number {
+  font-family: 'Bangers', cursive;
+  font-size: 22px;
+  color: #FFFF00;
+  text-align: center;
+  animation: rainbow-text 2s infinite;
+}
+
+.inscription-card .inscription-price {
+  text-align: center;
+  font-family: 'Bungee', cursive;
+  font-size: 18px;
+  color: #00FF00;
+  background: #000000;
+  padding: 8px;
+  border: 3px double #00FF00;
+  animation: pulse-glow 1s infinite;
+  margin-top: 10px;
+}
+
+.inscription-card .inscription-price .sats {
+  font-size: 12px;
+  margin-left: 4px;
+}
+
+/* BADGE STYLES */
+.inscription-card .badge-sold,
+.inscription-card .badge-pending {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  padding: 5px 10px;
+  z-index: 10;
+}
+
+.inscription-card .badge-sold {
+  background: #FF0000;
+  color: #FFFF00;
+  animation: blink-fast 0.5s infinite;
+}
+
+.inscription-card .badge-pending {
+  background: #FF6600;
+  color: #FFFFFF;
+  animation: pulse-glow 1s infinite;
+}
+
+/* INSCRIPTION DETAIL PAGE */
+.detail-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.detail-media {
+  flex: 1;
+  min-width: 300px;
+  max-width: 500px;
+}
+
+.inscription-frame {
+  background: linear-gradient(135deg, #FFD700, #B8860B, #FFD700, #DAA520, #FFD700);
+  border: 20px ridge gold;
+  padding: 20px;
+  position: relative;
+  box-shadow: 0 0 0 5px #000000, 0 0 0 10px #FFD700, inset 0 0 50px rgba(0,0,0,0.5), 10px 10px 30px rgba(0,0,0,0.5);
+  animation: fire-flicker 2.5s infinite;
+}
+
+.inscription-frame::before {
+  content: "★ RARE ★ AUTHENTIC ★ WOW ★";
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Bangers', cursive;
+  font-size: 20px;
+  color: #FF0000;
+  animation: rainbow-text 3s infinite;
+  white-space: nowrap;
+}
+
+.inscription-frame img,
+.inscription-frame iframe {
+  width: 100%;
+  display: block;
+  border: 5px solid #000000;
+  animation: gradient-shift 10s linear infinite;
+}
+
+.detail-sidebar {
+  flex: 1;
+  min-width: 300px;
+  max-width: 500px;
+}
+
+.inscription-title {
+  font-family: 'Creepster', cursive;
+  font-size: 48px;
+  color: #FF00FF;
+  text-shadow: 4px 4px 0 #00FFFF, -4px -4px 0 #FFFF00;
+  animation: rainbow-text 2s infinite, wobble 1s infinite;
+  margin-bottom: 20px;
+}
+
+.inscription-details {
+  background: linear-gradient(180deg, #000033, #330033);
+  border: 5px double #00FFFF;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 2px dashed #FF00FF;
+}
+
+.detail-row:last-child { border-bottom: none; }
+
+.detail-label {
+  font-family: 'Comic Neue', cursive;
+  font-size: 16px;
+  color: #FFFF00;
+}
+
+.detail-value {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  color: #00FF00;
+  animation: blink-erratic 3s infinite;
+}
+
+.detail-value a {
+  color: #00FF00;
+  text-decoration: none;
+}
+
+.detail-value a:hover {
+  color: #FFFF00;
+  animation: rainbow-text 0.5s infinite;
+}
+
+/* RAINBOW DIVIDER */
+.rainbow-divider {
+  height: 10px;
+  background: linear-gradient(90deg, #FF0000, #FF6600, #FFFF00, #00FF00, #00FFFF, #0000FF, #FF00FF);
+  margin: 20px 0;
+  animation: rainbow-bg 2s linear infinite;
+  background-size: 200% 100%;
+}
+
+/* BUY BUTTON */
+.buy-button {
+  display: block;
+  width: 100%;
+  padding: 20px;
+  background: linear-gradient(45deg, #FF0000, #FF6600, #FFFF00);
+  background-size: 200% 200%;
+  animation: rainbow-bg 4s ease infinite, pulse-glow 0.5s infinite;
+  border: 8px outset #FFD700;
+  font-family: 'Bungee', cursive;
+  font-size: 32px;
+  color: #000000;
+  text-shadow: 2px 2px 0 #FFFFFF;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+.buy-button:hover {
+  animation: shake 0.8s infinite, fire-flicker 0.3s infinite;
+  transform: scale(1.05);
+}
+
+/* PRICE DISPLAY */
+.price-display {
+  background: #000000;
+  border: 5px ridge #FFD700;
+  padding: 20px;
+  text-align: center;
+}
+
+.price-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  color: #00FF00;
+  animation: blink-slow 1.5s infinite;
+  margin-bottom: 10px;
+}
+
+.price-amount {
+  font-family: 'Bungee', cursive;
+  font-size: 42px;
+  color: #FFFF00;
+  text-shadow: 3px 3px 0 #FF0000;
+  animation: rainbow-text 2s infinite;
+}
+
+.price-amount .sats {
+  font-size: 20px;
+  color: #00FFFF;
+}
+
+/* FEES SECTION */
+.fees-section {
+  background: linear-gradient(180deg, #000033, #330033);
+  border: 3px dashed #00FFFF;
+  padding: 15px;
+  margin: 20px 0;
+}
+
+.fee-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-family: 'Comic Neue', cursive;
+  color: #00FFFF;
+}
+
+.fee-row.total {
+  border-top: 2px solid #FF00FF;
+  margin-top: 10px;
+  padding-top: 15px;
+  font-family: 'Bungee', cursive;
+  font-size: 18px;
+  color: #FFFF00;
+}
+
+/* ACTIVITY PAGE */
+.activity-title {
+  font-family: 'Bungee', cursive;
+  font-size: 48px;
+  text-align: center;
+  color: #00FF00;
+  text-shadow: 5px 5px 0 #FF0000, -5px -5px 0 #0000FF;
+  animation: rainbow-text 2s infinite;
+  margin-bottom: 30px;
+}
+
+.activity-ticker {
+  background: #000000;
+  border: 5px solid #00FF00;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.activity-ticker .ticker-content {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee-left 20s linear infinite;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  color: #00FF00;
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.activity-row {
+  padding: 20px;
+  border: 5px outset;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: wobble 2s ease-in-out infinite;
+  position: relative;
+}
+
+.activity-row:nth-child(odd) { background: linear-gradient(90deg, #330000, #003300); border-color: #FF0000; }
+.activity-row:nth-child(even) { background: linear-gradient(90deg, #000033, #330033); border-color: #00FFFF; }
+
+.activity-row.sold::after {
+  content: "SOLD!!!";
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #FF0000;
+  color: #FFFF00;
+  font-family: 'Bangers', cursive;
+  font-size: 20px;
+  padding: 5px 15px;
+  transform: rotate(15deg);
+  animation: blink-fast 0.3s infinite, pulse-glow 0.5s infinite;
+}
+
+.activity-row .item-name {
+  font-family: 'Bangers', cursive;
+  font-size: 18px;
+  color: #FFFF00;
+}
+
+.activity-row .item-name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.activity-row .item-price {
+  font-family: 'Bungee', cursive;
+  font-size: 16px;
+  color: #00FF00;
+  animation: rainbow-text 2s infinite;
+}
+
+.activity-row .status-badge {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  padding: 5px 10px;
+  margin-left: 10px;
+}
+
+.activity-row .status-badge.pending {
+  background: #FF6600;
+  color: #FFFFFF;
+  animation: pulse-glow 1s infinite;
+}
+
+.activity-row .status-badge.confirmed {
+  background: #00FF00;
+  color: #000000;
+  animation: blink-slow 1.5s infinite;
+}
+
+/* POLICY PAGE */
+.policy-title {
+  font-family: 'Creepster', cursive;
+  font-size: 48px;
+  text-align: center;
+  color: #FF0000;
+  text-shadow: 5px 5px 0 #FFFF00, -5px -5px 0 #00FFFF;
+  animation: shake 2s infinite;
+  margin-bottom: 30px;
+}
+
+.policy-container {
+  background: linear-gradient(135deg, #FFFACD, #FFE4B5);
+  border: 15px double #8B4513;
+  padding: 30px;
+  position: relative;
+  transform: rotate(1deg);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.policy-container::before {
+  content: "📜 OFFICIAL DOCUMENT 📜";
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Bangers', cursive;
+  font-size: 24px;
+  color: #8B4513;
+  animation: wobble 3s infinite;
+}
+
+.policy-section {
+  margin-bottom: 30px;
+}
+
+.policy-section h3 {
+  font-family: 'Bungee', cursive;
+  font-size: 28px;
+  color: #FF0000;
+  border-bottom: 5px dashed #FF0000;
+  padding-bottom: 10px;
+  animation: blink-slow 1s infinite;
+}
+
+.policy-section p {
+  font-family: 'Comic Neue', cursive;
+  font-size: 18px;
+  color: #000080;
+  line-height: 1.8;
+}
+
+.policy-section .important {
+  background: #FFFF00;
+  color: #FF0000;
+  padding: 2px 8px;
+  font-weight: bold;
+  animation: blink-fast 1.5s infinite;
+}
+
+.policy-yaml {
+  background: #000000;
+  color: #00FF00;
+  padding: 20px;
+  border: 5px ridge #00FF00;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+.wallet-address-box {
+  background: #000000;
+  border: 5px ridge #FFD700;
+  padding: 15px;
+  margin: 15px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wallet-address {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: #00FF00;
+  word-break: break-all;
+}
+
+.btn-copy {
+  background: linear-gradient(45deg, #FF0000, #FF6600);
+  border: 3px outset #FFFF00;
+  color: #FFFFFF;
+  font-family: 'Bangers', cursive;
+  padding: 8px 16px;
+  cursor: pointer;
+  animation: wobble 2s infinite;
+}
+
+.btn-copy:hover {
+  animation: shake 0.5s infinite;
+}
+
+/* WALLET POPUP */
+.wallet-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wallet-popup-overlay[data-state="closed"] {
+  display: none;
+}
+
+.wallet-popup {
+  background: linear-gradient(45deg, #FF0000, #FF6600, #FFFF00, #00FF00, #00FFFF, #0000FF, #FF00FF, #FF0000);
+  background-size: 400% 400%;
+  animation: rainbow-bg 6s ease infinite;
+  border: 15px ridge gold;
+  padding: 30px;
+  max-width: 500px;
+  position: relative;
+  transform: rotate(-2deg);
+  box-shadow: 0 0 0 5px #FF00FF, 0 0 0 10px #00FFFF, 0 0 0 15px #FFFF00, 0 0 50px #FF0000, 0 0 100px #FF00FF;
+}
+
+.wallet-popup::before {
+  content: "🔥💰🔥💰🔥💰🔥💰🔥💰🔥";
+  position: absolute;
+  top: -40px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 24px;
+  animation: bounce 1.5s infinite;
+}
+
+.wallet-popup::after {
+  content: "💰🔥💰🔥💰🔥💰🔥💰🔥💰";
+  position: absolute;
+  bottom: -40px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 24px;
+  animation: bounce 1.5s infinite 0.25s;
+}
+
+.wallet-popup-title {
+  font-family: 'Bungee', cursive;
+  font-size: 36px;
+  text-align: center;
+  color: #FFFFFF;
+  text-shadow: 4px 4px 0 #FF0000, -4px -4px 0 #0000FF, 8px 8px 0 #000000;
+  animation: shake 1.5s infinite, rainbow-text 1s infinite;
+  margin-bottom: 20px;
+}
+
+.wallet-popup-subtitle {
+  font-family: 'Comic Neue', cursive;
+  font-size: 20px;
+  text-align: center;
+  color: #000000;
+  background: #FFFF00;
+  padding: 10px;
+  border: 3px dashed #FF0000;
+  animation: blink-slow 1.5s infinite;
+  margin-bottom: 20px;
+}
+
+.wallet-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.wallet-option {
+  background: linear-gradient(90deg, #330033, #003333);
+  border: 5px outset;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  animation: wobble 1s ease-in-out infinite;
+  position: relative;
+}
+
+.wallet-option:nth-child(1) { border-color: #FF0000; }
+.wallet-option:nth-child(2) { border-color: #00FF00; }
+.wallet-option:nth-child(3) { border-color: #FFFF00; }
+
+.wallet-option:hover {
+  animation: shake 0.8s infinite;
+  transform: scale(1.05);
+}
+
+.wallet-option .wallet-icon {
+  width: 40px;
+  height: 40px;
+  animation: spin 8s linear infinite;
+}
+
+.wallet-option .wallet-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.wallet-option .wallet-name {
+  font-family: 'Bangers', cursive;
+  font-size: 28px;
+  color: #FFFF00;
+  text-shadow: 2px 2px 0 #FF0000;
+}
+
+.wallet-popup-footer {
+  margin-top: 20px;
+  text-align: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: #000000;
+  background: #CCCCCC;
+  padding: 10px;
+  border: 2px inset #999999;
+}
+
+.wallet-popup-close {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #FF0000;
+  border: 3px outset #FFFF00;
+  color: #FFFFFF;
+  font-family: 'Bangers', cursive;
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  animation: wobble 1s infinite;
+}
+
+/* FOOTER */
+.geo-footer {
+  background: #000000;
+  border-top: 10px ridge #FFD700;
+  padding: 30px;
+  margin-top: 50px;
+  text-align: center;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  font-family: 'Comic Neue', cursive;
+  font-size: 18px;
+  color: #00FFFF;
+  text-decoration: none;
+  animation: rainbow-text 3s infinite;
+}
+
+.footer-links a:hover {
+  animation: blink-fast 0.2s infinite;
+}
+
+.webring {
+  background: linear-gradient(90deg, #330033, #003333, #333300);
+  border: 5px ridge silver;
+  padding: 15px;
+  margin: 20px auto;
+  max-width: 400px;
+}
+
+.webring-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  color: #FFFF00;
+  margin-bottom: 10px;
+}
+
+.webring-nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.webring-nav a {
+  background: #000000;
+  color: #00FF00;
+  padding: 5px 15px;
+  border: 2px outset #00FF00;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  text-decoration: none;
+}
+
+.copyright {
+  font-family: 'Comic Neue', cursive;
+  font-size: 14px;
+  color: #888888;
+  margin-top: 20px;
+}
+
+.copyright .heart {
+  color: #FF0000;
+  animation: pulse-glow 1s infinite;
+}
+
+.copyright a {
+  color: #00FFFF;
+  text-decoration: none;
+}
+
+/* HIT COUNTER */
+.hit-counter-row {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  margin: 10px 0;
+}
+
+.counter-digit {
+  background: #000000;
+  color: #FF0000;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 20px;
+  padding: 5px 8px;
+  border: 2px inset #333333;
+}
+
+/* GUESTBOOK BUTTON */
+.guestbook-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  animation: bounce 1.5s ease-in-out infinite;
+}
+
+.guestbook-button a {
+  display: block;
+  background: linear-gradient(45deg, #FF0000, #FF6600, #FFFF00, #00FF00, #00FFFF, #FF00FF);
+  background-size: 300% 300%;
+  animation: rainbow-bg 6s ease infinite;
+  padding: 20px 30px;
+  font-family: 'Bangers', cursive;
+  font-size: 24px;
+  color: #FFFFFF;
+  text-decoration: none;
+  border: 5px ridge gold;
+  text-shadow: 3px 3px 0 #000000;
+  transform: rotate(5deg);
+}
+
+.guestbook-button a:hover {
+  animation: shake 0.8s infinite;
+  transform: scale(1.1) rotate(-5deg);
+}
+
+/* NETSCAPE BADGE */
+.netscape-badge {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: #CCCCCC;
+  border: 3px outset #FFFFFF;
+  padding: 10px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #000000;
+  text-align: center;
+  z-index: 1000;
+  animation: wobble 2s ease-in-out infinite;
+}
+
+.netscape-badge span {
+  display: block;
+  margin-top: 5px;
+  color: #0000FF;
+}
+
+/* BUTTON SPINNER */
+.button-spinner {
+  display: inline-flex;
+  height: 1rem;
+  width: 1rem;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: spin 1s linear infinite;
+}
+
+.button-spinner-hidden {
+  visibility: hidden;
+}
+
+/* MESSAGE BOXES */
+.message {
+  padding: 15px;
+  border: 5px outset;
+  margin: 15px 0;
+}
+
+.message-success {
+  background: linear-gradient(90deg, #003300, #006600);
+  border-color: #00FF00;
+  color: #00FF00;
+}
+
+.message-error {
+  background: linear-gradient(90deg, #330000, #660000);
+  border-color: #FF0000;
+  color: #FF0000;
+}
+
+.message-pending {
+  background: linear-gradient(90deg, #333300, #666600);
+  border-color: #FF6600;
+  color: #FF6600;
+}
+
+.message-title {
+  font-family: 'Bangers', cursive;
+  font-size: 24px;
+  animation: rainbow-text 2s infinite;
+}
+
+.message-link {
+  display: block;
+  margin-top: 10px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: #00FFFF;
+}
+
+/* OPTIONAL PAYMENTS */
+.optional-payments {
+  background: linear-gradient(180deg, #000033, #330033);
+  border: 3px dashed #FF00FF;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.optional-payments-label {
+  font-family: 'Bangers', cursive;
+  font-size: 20px;
+  color: #FFFF00;
+  margin-bottom: 15px;
+  animation: blink-slow 1.5s infinite;
+}
+
+.optional-payment {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  background: #000000;
+  border: 3px outset #00FFFF;
+  padding: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.optional-payment:hover {
+  animation: wobble 0.5s infinite;
+}
+
+.optional-payment input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #FF00FF;
+}
+
+.optional-payment-title {
+  font-family: 'Comic Neue', cursive;
+  font-size: 16px;
+  color: #00FFFF;
+  flex: 1;
+}
+
+.optional-payment-amount {
+  font-family: 'Bungee', cursive;
+  font-size: 16px;
+  color: #00FF00;
+}
+
+.optional-payment-desc {
+  width: 100%;
+  font-family: 'Comic Neue', cursive;
+  font-size: 12px;
+  color: #888888;
+}
+
+/* SKELETON LOADING */
+.inscription-skeleton {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #330033 25%, #003333 50%, #330033 75%);
+  background-size: 200% 100%;
+  animation: marquee-left 1.5s infinite;
+}
+
+/* ORDER PANEL */
+.order-panel {
+  background: linear-gradient(180deg, #000033, #330033);
+  border: 5px double #FFD700;
+  padding: 20px;
+}
+
+.order-status {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.order-status.pending {
+  background: #FF6600;
+  color: #FFFFFF;
+  animation: pulse-glow 1s infinite;
+}
+
+.order-status.confirmed {
+  background: #00FF00;
+  color: #000000;
+  animation: blink-slow 1.5s infinite;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .site-title { font-size: 28px; }
+  .wallet-popup { margin: 20px; padding: 15px; }
+  .geo-nav a { padding: 10px 15px; font-size: 14px; }
+  .collection-card { width: 100%; }
+  .section-title { font-size: 32px; }
+  .inscription-title { font-size: 32px; }
+  .detail-layout { flex-direction: column; }
+  .detail-media, .detail-sidebar { max-width: 100%; }
+}
+
+/* REDUCED MOTION */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 2s !important;
+    transition-duration: 0.5s !important;
+  }
+}

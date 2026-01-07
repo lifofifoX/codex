@@ -1,0 +1,45 @@
+<a
+  class="inscription-card"
+  href="/<%= encodeURIComponent(collection.slug) %>/<%= encodeURIComponent(inscription.id) %>"
+  data-testid="inscription-card"
+  data-inscription-id="<%= inscription.id %>"
+>
+  <% if (order && order.status === 'pending') { %>
+    <span class="badge-pending">PENDING!!!</span>
+  <% } else if (order && order.status === 'confirmed') { %>
+    <span class="badge-sold">SOLD!!!</span>
+  <% } %>
+
+  <div class="inscription-image" data-controller="image" style="position: relative; aspect-ratio: 1; overflow: hidden;">
+    <div class="inscription-skeleton" data-image-target="skeleton" style="position: absolute; inset: 0;"></div>
+    <% if (inscription.isImage) { %>
+      <img
+        src="<%= inscription.contentUrl %>"
+        alt="<%= inscription.title %>"
+        loading="lazy"
+        decoding="async"
+        style="image-rendering: pixelated; width: 100%; height: 100%; object-fit: cover; display: block;"
+        class="opacity-0 transition-opacity duration-300"
+        data-image-target="img"
+        data-action="load->image#loaded error->image#error"
+        data-testid="inscription-thumb"
+      />
+    <% } else { %>
+      <iframe
+        src="<%= inscription.previewUrl %>"
+        loading="lazy"
+        allow="accelerometer; gyroscope"
+        style="width: 100%; height: 100%; border: 0; pointer-events: none; display: block;"
+        class="opacity-0 transition-opacity duration-300"
+        data-image-target="media"
+        data-action="load->image#loaded error->image#error"
+        data-testid="inscription-thumb"
+      ></iframe>
+    <% } %>
+  </div>
+
+  <div class="inscription-info">
+    <div class="inscription-number" data-testid="inscription-title">#<%= new Intl.NumberFormat('en-US').format(inscription.number) %></div>
+    <div class="inscription-price" data-testid="inscription-price"><%= formatSats(collection.price_sats).replace(' sats', '') %></div>
+  </div>
+</a>

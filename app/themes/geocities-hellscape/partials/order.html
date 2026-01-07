@@ -1,0 +1,47 @@
+<div class="order-panel" data-testid="order-panel">
+  <% const isPending = order.status === 'pending' %>
+
+  <div class="order-status <%= isPending ? 'pending' : 'confirmed' %>" data-testid="order-banner">
+    <%= isPending ? '⏳ TRANSACTION PENDING!!! ⏳' : '🎉 SOLD!!! CONGRATS!!! 🎉' %>
+  </div>
+
+  <div style="margin-top: 20px;" data-testid="order-details">
+    <div class="detail-row">
+      <span class="detail-label">Status:</span>
+      <span class="detail-value" style="color: <%= isPending ? '#FF6600' : '#00FF00' %>;">
+        <% if (isPending) { %>
+          <span class="button-spinner" style="width: 12px; height: 12px; border-width: 1px; display: inline-block; vertical-align: middle; margin-right: 8px;"></span>
+        <% } %>
+        <%= order.status.toUpperCase() %>!!!
+      </span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Price:</span>
+      <span class="detail-value" style="color: #FFD700; font-family: 'Bungee', cursive;"><%= formatSats(order.price_sats) %></span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">Buyer:</span>
+      <span class="detail-value"><%= order.buyer_address.substring(0, 16) %>...</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">TX:</span>
+      <span class="detail-value">
+        <a href="https://mempool.space/tx/<%= order.txid %>" target="_blank" rel="noopener" style="color: #00FFFF;"><%= order.txid.substring(0, 16) %>...</a>
+      </span>
+    </div>
+  </div>
+
+  <% const extra = JSON.parse(order.extra_details || '{}') %>
+  <% const optionalPayments = extra.optional_payments || [] %>
+  <% if (optionalPayments.length > 0) { %>
+    <div style="margin-top: 20px; border-top: 3px dashed #FF00FF; padding-top: 20px;" data-testid="order-optional-payments">
+      <div style="font-family: 'Bangers', cursive; font-size: 20px; color: #FFFF00; margin-bottom: 15px;">*** EXTRA PAYMENTS ***</div>
+      <% optionalPayments.forEach((p) => { %>
+        <div class="detail-row">
+          <span class="detail-label"><%= p.title %>:</span>
+          <span class="detail-value" style="color: #00FF00;"><%= formatSats(p.amount) %></span>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>

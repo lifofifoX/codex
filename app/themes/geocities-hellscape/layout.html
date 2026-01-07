@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>~*~<%= title %>~*~</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Bungee&family=Comic+Neue:wght@400;700&family=Creepster&family=Pacifico&family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="<%= assets.css %>" />
+    <script type="module" src="<%= assets.js %>"></script>
+  </head>
+  <body
+    data-controller="store body-class usd wallet"
+    data-action="wallet:connected@window->body-class#setConnected wallet:disconnected@window->body-class#setDisconnected keydown.esc@window->wallet#close"
+    class="theme-geocities-hellscape"
+  >
+    <!-- TOP MARQUEE -->
+    <div class="marquee-top">
+      <div class="marquee-content">
+        ★★★ WELCOME 2 THE BEST SITE ON THE INTERNET!!! ★★★ FREE GIFS ★★★ SIGN MY GUESTBOOK ★★★ BEST VIEWED IN NETSCAPE NAVIGATOR 4.0 ★★★ 800x600 RESOLUTION ★★★ WEBMASTER: <%= CONFIG.artist_name.toUpperCase() %> ★★★
+      </div>
+    </div>
+
+    <!-- MIDDLE MARQUEE -->
+    <div class="marquee-middle">
+      <div class="marquee-content">
+        🔥🔥🔥 HOT NEW INSCRIPTIONS!!! 🔥🔥🔥 BITCOIN ORDINALS 4 SALE!!! 🔥🔥🔥 RARE DIGITAL ARTIFACTS!!! 🔥🔥🔥 COLLECT THEM ALL!!! 🔥🔥🔥
+      </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="geo-header">
+      <h1 class="site-title">
+        <% const artistName = "~*~" + CONFIG.artist_name.toUpperCase() + "'s AwEsOmE wEbPaGe~*~"; %>
+        <% for (let i = 0; i < artistName.length; i++) { %>
+          <span><%= artistName[i] %></span>
+        <% } %>
+      </h1>
+
+      <div style="text-align: center; margin-top: 20px;">
+        <div class="visitor-counter">
+          <span class="label">YOU ARE VISITOR NUMBER:</span>
+          <span class="number">000001337</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- UNDER CONSTRUCTION -->
+    <div class="under-construction">
+      <span class="construction-icon">👷</span>
+      <span class="construction-icon">🚧</span>
+      <span class="construction-icon">👷</span>
+      <br>
+      <span class="construction-text">!!! UNDER CONSTRUCTION !!!</span>
+      <br>
+      <span style="font-family: 'Comic Neue', cursive; font-size: 18px; color: #FF00FF;">CoMiNg SoOn: MoRe CoOl StUfF!!!</span>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="geo-nav" data-testid="header-nav">
+      <a href="/">🏠 HOME</a>
+      <a href="/activity">📊 ACTIVITY</a>
+      <a href="/policy">📜 POLICY</a>
+      <% if (typeof connected !== 'undefined' && connected) { %>
+        <a href="javascript:void(0)" data-action="wallet#logout:prevent">🚪 DISCONNECT</a>
+      <% } else { %>
+        <a href="javascript:void(0)" data-action="wallet#select" class="hide-on-connected">💰 CONNECT</a>
+        <a href="javascript:void(0)" data-action="wallet#logout:prevent" class="show-on-connected">🚪 DISCONNECT</a>
+      <% } %>
+    </nav>
+
+    <!-- Wallet Modal -->
+    <div data-wallet-target="selector" class="wallet-popup-overlay" data-state="closed">
+      <div class="wallet-popup">
+        <button class="wallet-popup-close" type="button" aria-label="Close" data-action="wallet#close">X</button>
+        <h2 class="wallet-popup-title">CONNECT UR WALLET!!!</h2>
+        <p class="wallet-popup-subtitle">WeLcOmE 2 tHe FuTuRe Of $$$$$</p>
+
+        <div class="wallet-options">
+          <button class="wallet-option" data-wallet-target="xverse" data-action="wallet#authorize:prevent" data-wallet-provider-param="xverse">
+            <div class="wallet-icon">
+              <img src="/wallets/xverse.png" alt="" />
+            </div>
+            <span class="wallet-name">XVERSE</span>
+          </button>
+          <button class="wallet-option" data-wallet-target="unisat" data-action="wallet#authorize:prevent" data-wallet-provider-param="unisat">
+            <div class="wallet-icon">
+              <img src="/wallets/unisat.png" alt="" />
+            </div>
+            <span class="wallet-name">UNISAT</span>
+          </button>
+        </div>
+
+        <div class="wallet-popup-footer">
+          BEST VIEWED WITH NETSCAPE NAVIGATOR 4.0
+          <span>JAVASCRIPT REQUIRED!!!</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main style="padding: 20px; position: relative; z-index: 5;" data-store-target="main">
+      <%- body %>
+    </main>
+
+    <!-- GUESTBOOK BUTTON -->
+    <div class="guestbook-button">
+      <a href="/">📝 SIGN GUESTBOOK ✨</a>
+    </div>
+
+    <!-- NETSCAPE BADGE -->
+    <div class="netscape-badge">
+      BEST VIEWED WITH
+      <span>NETSCAPE NAVIGATOR 4.0</span>
+      <span>800x600 RESOLUTION</span>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="geo-footer" data-testid="footer">
+      <div class="footer-links">
+        <a href="/">HOME</a>
+        <a href="/activity">ACTIVITY</a>
+        <a href="/policy">POLICY</a>
+        <% if (CONFIG.social_website_url) { %>
+          <a href="<%= CONFIG.social_website_url %>" target="_blank" rel="noopener">WEBSITE</a>
+        <% } %>
+        <% if (CONFIG.social_x_url) { %>
+          <a href="<%= CONFIG.social_x_url %>" target="_blank" rel="noopener">X/TWITTER</a>
+        <% } %>
+      </div>
+
+      <div class="webring">
+        <div class="webring-title">🌐 BITCOIN ART WEBRING 🌐</div>
+        <div class="webring-nav">
+          <a href="/">&lt;&lt; PREV</a>
+          <a href="/">RANDOM</a>
+          <a href="/">NEXT &gt;&gt;</a>
+        </div>
+      </div>
+
+      <div class="hit-counter-row">
+        <span class="counter-digit">0</span>
+        <span class="counter-digit">0</span>
+        <span class="counter-digit">0</span>
+        <span class="counter-digit">1</span>
+        <span class="counter-digit">3</span>
+        <span class="counter-digit">3</span>
+        <span class="counter-digit">7</span>
+      </div>
+
+      <div class="copyright">
+        Copyright 1996-<%= new Date().getFullYear() %> <%= CONFIG.artist_name %> - Made with <span class="heart">❤</span> and way too many animated GIFs
+        <br>
+        Powered by <a href="https://github.com/lifofifoX/covenant" target="_blank" rel="noopener">Covenant</a>
+      </div>
+    </footer>
+  </body>
+</html>

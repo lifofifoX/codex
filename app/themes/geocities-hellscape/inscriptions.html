@@ -1,0 +1,75 @@
+<section data-testid="inscriptions-page">
+  <h2 class="sr-only" data-testid="page-title">Collection</h2>
+
+  <!-- Collection Header -->
+  <div style="background: linear-gradient(135deg, #330033, #003333); border: 10px ridge gold; padding: 30px; margin: 20px; position: relative; animation: fire-flicker 2s infinite;">
+    <div style="position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-family: 'Bangers', cursive; font-size: 24px; color: #FFFF00; animation: blink-fast 0.5s infinite;">🔥🔥🔥 COLLECTION 🔥🔥🔥</div>
+
+    <h1 class="section-title" style="margin-bottom: 20px;"><%= collection.title.toUpperCase() %></h1>
+
+    <% if (collection.parent_inscription_id || collection.gallery_inscription_id) { %>
+      <% const isGallery = Boolean(collection.gallery_inscription_id) %>
+      <p style="font-family: 'Comic Neue', cursive; font-size: 18px; color: #00FFFF; text-align: center;">
+        <% if (isGallery) { %>
+          🖼️ <%= new Intl.NumberFormat('en-US').format(parentInscription.galleryCount) %> INSCRIPTIONS IN THIS GALLERY!!!
+        <% } else { %>
+          🧬 <%= new Intl.NumberFormat('en-US').format(parentInscription.childCount) %> INSCRIPTIONS FROM PARENT!!!
+        <% } %>
+      </p>
+    <% } %>
+
+    <div style="display: flex; justify-content: center; gap: 40px; margin-top: 20px; flex-wrap: wrap;">
+      <div style="text-align: center;">
+        <div style="font-family: 'Bungee', cursive; font-size: 48px; color: #00FF00; animation: pulse-glow 1s infinite;"><%= collection.itemsCount ?? 0 %></div>
+        <div style="font-family: 'Press Start 2P', monospace; font-size: 12px; color: #FFFF00;">AVAILABLE</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="font-family: 'Bungee', cursive; font-size: 48px; color: #FF00FF; animation: rainbow-text 2s infinite;"><%= formatSats(collection.price_sats).replace(' sats', '') %></div>
+        <div style="font-family: 'Press Start 2P', monospace; font-size: 12px; color: #FFFF00;">FLOOR</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inscriptions Grid -->
+  <% if ((collection.itemsCount ?? 0) === 0) { %>
+    <div style="background: #000000; border: 5px ridge #FF0000; padding: 30px; text-align: center; margin: 20px;">
+      <p style="font-family: 'Press Start 2P', monospace; font-size: 14px; color: #FF0000; animation: blink-slow 1s infinite;" data-testid="empty-title">NO INSCRIPTIONS AVAILABLE!!! ALL SOLD OUT!!!</p>
+    </div>
+  <% } else { %>
+    <div class="inscription-grid" data-testid="grid">
+      <%- collection.itemsHtml %>
+    </div>
+
+    <!-- Pagination -->
+    <% if ((pagination.totalPages ?? 1) > 1) { %>
+      <div style="display: flex; justify-content: center; gap: 10px; margin: 30px; flex-wrap: wrap;" data-testid="pagination">
+        <a
+          href="<%= pagination.prevUrl %>"
+          style="background: <%= pagination.hasPrev ? 'linear-gradient(45deg, #FF0000, #FF6600)' : '#333333' %>; border: 4px outset <%= pagination.hasPrev ? '#FFFF00' : '#666666' %>; padding: 15px 25px; font-family: 'Bangers', cursive; font-size: 20px; color: #FFFFFF; text-decoration: none; <%= pagination.hasPrev ? 'animation: wobble 2s infinite;' : 'opacity: 0.5; cursor: not-allowed;' %>"
+          data-action="click->store#paginate"
+          data-testid="prev-page"
+        >&lt;&lt; PREV</a>
+
+        <% if ((pagination.pages ?? []).length > 0) { %>
+          <% pagination.pages.forEach((pageLink) => { %>
+            <% if (pageLink.type !== 'gap') { %>
+              <a
+                href="<%= pageLink.url %>"
+                style="background: <%= pageLink.isActive ? 'linear-gradient(45deg, #00FF00, #00FFFF)' : 'linear-gradient(45deg, #330033, #003333)' %>; border: 4px outset <%= pageLink.isActive ? '#FFFF00' : '#FF00FF' %>; padding: 15px 20px; font-family: 'Press Start 2P', monospace; font-size: 14px; color: <%= pageLink.isActive ? '#000000' : '#FFFFFF' %>; text-decoration: none; <%= pageLink.isActive ? '' : 'animation: wobble 2s infinite;' %>"
+                data-action="click->store#paginate"
+                data-testid="page-link"
+              ><%= pageLink.n %></a>
+            <% } %>
+          <% }) %>
+        <% } %>
+
+        <a
+          href="<%= pagination.nextUrl %>"
+          style="background: <%= pagination.hasNext ? 'linear-gradient(45deg, #FF0000, #FF6600)' : '#333333' %>; border: 4px outset <%= pagination.hasNext ? '#FFFF00' : '#666666' %>; padding: 15px 25px; font-family: 'Bangers', cursive; font-size: 20px; color: #FFFFFF; text-decoration: none; <%= pagination.hasNext ? 'animation: wobble 2s infinite;' : 'opacity: 0.5; cursor: not-allowed;' %>"
+          data-action="click->store#paginate"
+          data-testid="next-page"
+        >NEXT &gt;&gt;</a>
+      </div>
+    <% } %>
+  <% } %>
+</section>

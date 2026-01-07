@@ -1,0 +1,56 @@
+<section data-testid="activity-page">
+  <h2 class="activity-title" data-testid="page-title">📊 LATEST ACTIVITY 📊</h2>
+
+  <!-- Activity Ticker -->
+  <div class="activity-ticker">
+    <div class="ticker-content">
+      +++ TRANSACTIONS HAPPENING NOW!!! +++ INSCRIPTIONS BEING SOLD!!! +++ CHECK OUT THE ACTION!!! +++ DON'T MISS OUT!!! +++
+    </div>
+  </div>
+
+  <% if ((orders ?? []).length === 0) { %>
+    <div style="background: #000000; border: 5px ridge #FF0000; padding: 30px; text-align: center; margin: 20px;" data-testid="empty-state">
+      <p style="font-family: 'Press Start 2P', monospace; font-size: 14px; color: #FF0000; animation: blink-slow 1s infinite;">NO ACTIVITY YET!!! BE THE FIRST 2 BUY!!!</p>
+    </div>
+  <% } else { %>
+    <div class="activity-list" data-testid="orders">
+      <% orders.forEach((o) => { %>
+        <% const isSold = o.status === 'confirmed' %>
+        <% const isPending = o.status === 'pending' %>
+        <div class="activity-row <%= isSold ? 'sold' : '' %>" data-testid="order-row">
+          <div style="display: flex; align-items: center; gap: 15px; flex: 1; min-width: 0;">
+            <a href="/<%= encodeURIComponent(o.collection_slug) %>/<%= encodeURIComponent(o.inscription_id) %>" style="display: block; width: 60px; height: 60px; border: 3px ridge silver; flex-shrink: 0;" data-testid="order-thumb-link">
+              <iframe
+                src="https://ordinals.com/preview/<%= encodeURIComponent(o.inscription_id) %>"
+                style="width: 100%; height: 100%; border: none; pointer-events: none;"
+                loading="lazy"
+                data-testid="order-thumb-media"
+              ></iframe>
+            </a>
+            <div style="min-width: 0;">
+              <span class="item-name">
+                <a href="/<%= encodeURIComponent(o.collection_slug) %>/<%= encodeURIComponent(o.inscription_id) %>" data-testid="order-inscription-link">
+                  <%= o.inscription_id.substring(0, 16) %>...
+                </a>
+              </span>
+              <% if (o.txid) { %>
+                <div style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: #00FFFF; margin-top: 5px;">
+                  TX: <a href="https://mempool.space/tx/<%= encodeURIComponent(o.txid) %>" target="_blank" rel="noopener" style="color: #00FF00;" data-testid="order-tx-link"><%= o.txid.substring(0, 12) %>...</a>
+                </div>
+              <% } %>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 15px;">
+            <% if (o.price_sats) { %>
+              <span class="item-price" data-testid="order-price"><%= formatSats(o.price_sats) %></span>
+            <% } %>
+            <span class="status-badge <%= isPending ? 'pending' : 'confirmed' %>" data-testid="order-status">
+              <%= isPending ? 'PENDING' : 'CONFIRMED' %>
+            </span>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</section>
