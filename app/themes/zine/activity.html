@@ -22,6 +22,7 @@
         </thead>
         <tbody>
           <% orders.forEach((o) => { %>
+            <% const shortId = o.inscription_id ? (o.inscription_id.length > 16 ? `${o.inscription_id.slice(0, 8)}…${o.inscription_id.slice(-6)}` : o.inscription_id) : '' %>
             <% const createdHuman = o.created_at ? new Date(o.created_at * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }) : '' %>
             <tr data-testid="order-row">
               <!-- Thumbnail -->
@@ -50,7 +51,7 @@
               <!-- Inscription info -->
               <td data-label="Inscription" style="min-width: 0;">
                 <a href="/<%= encodeURIComponent(o.collection_slug) %>/<%= encodeURIComponent(o.inscription_id) %>" style="color: var(--color-primary); text-decoration: none; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px;" data-testid="order-inscription-link">
-                  <%= o.inscription_id.substring(0, 20) %>...
+                  <%= shortId %>
                 </a>
                 <div style="font-size: 0.75rem; color: var(--color-muted); margin-top: 4px;" data-testid="order-collection"><%= o.collection_slug %></div>
                 <% if (o.txid) { %>
