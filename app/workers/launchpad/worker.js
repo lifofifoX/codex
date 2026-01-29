@@ -85,17 +85,32 @@ class AvailableIdsCache {
     this.ttlMs = ttlMs
     this.ids = null
     this.expiresAt = 0
+    this.loadingPromise = null
   }
 
   async load({ collectionSlug }) {
     const now = Date.now()
+
     if (this.ids && now < this.expiresAt) {
       return this.ids
     }
 
-    this.ids = await getAvailableInscriptionIds({ db: this.db, collectionSlug })
-    this.expiresAt = now + this.ttlMs
-    return this.ids
+    if (this.loadingPromise) {
+      return this.loadingPromise
+    }
+
+    this.loadingPromise = this.#doLoad(collectionSlug)
+    return this.loadingPromise
+  }
+
+  async #doLoad(collectionSlug) {
+    try {
+      this.ids = await getAvailableInscriptionIds({ db: this.db, collectionSlug })
+      this.expiresAt = Date.now() + this.ttlMs
+      return this.ids
+    } finally {
+      this.loadingPromise = null
+    }
   }
 
   remove(id) {
