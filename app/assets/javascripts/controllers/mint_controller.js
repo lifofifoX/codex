@@ -8,6 +8,7 @@ import { Mempool } from '../../../models/mempool.js'
 const BASE_TX_SIZE = 10.5
 const PADDING = 546n
 const USER_REJECTED_SIGN_REQUEST_MESSAGE = "User rejected the request."
+const OP_RETURN_MIN_BYTES = 81
 
 export default class extends Controller {
   static targets = [
@@ -21,6 +22,7 @@ export default class extends Controller {
     'mintLabel',
     'turnstile',
     'optionalPayment',
+    'spamInput',
     'fees',
     'feeRate',
     'fee',
@@ -45,6 +47,7 @@ export default class extends Controller {
     this.txid = null
 
     if (this.hasTurnstileTarget) this.#attachTurnstileCallbacks()
+    this.#updateSpamValidity()
 
     if (Wallet.connected && Wallet.provider === 'unisat') {
       const checkUnisat = setInterval(() => {
@@ -67,6 +70,12 @@ export default class extends Controller {
 
   onWalletDisconnected() {
     window.location.reload()
+  }
+
+  onSpamInput() {
+    this.#updateSpamValidity()
+    this.#syncMintButtonWithTurnstile()
+    this.calculateCost()
   }
 
   disconnect() {
@@ -97,6 +106,11 @@ export default class extends Controller {
   }
 
   async mint() {
+    if (!(await this.#validateForm(true))) {
+      this.#syncMintButtonWithTurnstile()
+      return
+    }
+
     this.#disableForm()
     this.#hideError()
     this.#setMintingState()
@@ -153,8 +167,14 @@ export default class extends Controller {
   async calculateCost() {
     if (!this.#prepared) return false
 
+    if (!(await this.#validateForm(false))) {
+      this.#resetSummaryCosts()
+      return false
+    }
+
     try {
       this.#hideError()
+      this.#updateSpamValidity()
 
       const { networkFees, satsRequired } = this.#determineFeesAndUTXOs()
       const inscriptionPaddingSats = Number(this.#inscriptionMetadata?.value ?? this.lowestInscriptionUtxoSizeValue)
@@ -216,7 +236,7 @@ export default class extends Controller {
     if (!this.#inscriptionMetadata) throw new Error('Missing inscription metadata')
     const { selectedUTXOs, satsRequired } = this.#determineFeesAndUTXOs()
 
-    const tx = new btc.Transaction()
+    const tx = new btc.Transaction({ allowUnknownOutputs: true })
 
     const [txid, vout, _offset] = this.#inscriptionMetadata.satpoint.split(':')
 
@@ -265,6 +285,11 @@ export default class extends Controller {
     const changeAmount = inputValue - BigInt(satsRequired)
     if (changeAmount >= PADDING) tx.addOutputAddress(Wallet.paymentAddress.address, changeAmount)
 
+    if (this.hasSpamInputTarget) {
+      const script = this.#buildOpReturnScript()
+      tx.addOutput({ script, amount: 0n })
+    }
+
     const psbt = tx.toPSBT()
     const signInputs = { [ Wallet.paymentAddress.address ]: paymentWalletInputs }
 
@@ -298,6 +323,8 @@ export default class extends Controller {
     for (const optionalPayment of optionalPayments) {
       txSize += Wallet.calculateOutputSize(optionalPayment.address)
     }
+
+    txSize += this.#opReturnOutputSize()
 
     let selectedUTXOs = []
 
@@ -447,6 +474,58 @@ export default class extends Controller {
   }
 
   #syncMintButtonWithTurnstile() {
-    this.mintButtonTarget.disabled = this.hasTurnstileTarget && !this.#turnstileToken
+    this.#updateSpamValidity()
+
+    const turnstileBlocked = this.hasTurnstileTarget && !this.#turnstileToken
+    const spamBlocked = this.hasSpamInputTarget && !this.spamInputTarget.validity.valid
+
+    this.mintButtonTarget.disabled = turnstileBlocked || spamBlocked
+  }
+
+  async #validateForm(showErrors = true) {
+    this.#updateSpamValidity()
+
+    if (showErrors) return this.formTarget.reportValidity()
+    return this.formTarget.checkValidity()
+  }
+
+  #resetSummaryCosts() {
+    this.feeTarget.textContent = '-'
+    this.feeRateTarget.textContent = '-'
+    this.totalTarget.textContent = '-'
+
+    const totalUsd = this.element.querySelector('[data-usd-role="total"]')
+
+    if (totalUsd) {
+      totalUsd.textContent = '-'
+      totalUsd.setAttribute('data-usd-sats', '')
+    }
+  }
+
+  #updateSpamValidity() {
+    if (!this.hasSpamInputTarget) return
+
+    if (this.#opReturnBytes.length < OP_RETURN_MIN_BYTES) {
+      this.spamInputTarget.setCustomValidity(`SPAM must be at least ${OP_RETURN_MIN_BYTES} bytes`)
+    } else {
+      this.spamInputTarget.setCustomValidity(``)
+    }
+  }
+
+  get #opReturnBytes() {
+    const value = this.spamInputTarget?.value ?? ''
+    return new TextEncoder().encode(value)
+  }
+
+  #opReturnOutputSize() {
+    if (!this.hasSpamInputTarget) return 0
+    if (!this.spamInputTarget.validity.valid) return 0
+
+    const script = this.#buildOpReturnScript()
+    return 9.5 + script.length
+  }
+
+  #buildOpReturnScript() {
+    return btc.Script.encode(["RETURN", this.#opReturnBytes])
   }
 }

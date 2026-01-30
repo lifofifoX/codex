@@ -1,7 +1,27 @@
+import * as btc from '@scure/btc-signer'
 import { Collection } from '../models/collection.js'
 import { parseSignedPsbt } from '../utils/psbt.js'
 import { readJsonWithLimit } from '../utils/request_body.js'
 import { isValidInscriptionId, normalizeOrdinalAddress } from '../utils/validation.js'
+
+const OP_RETURN_MIN_BYTES = 81
+
+function getOpReturnPayloadBytes(tx) {
+  try {
+    const output = tx.getOutput(tx.outputsLength - 1)
+    if (!output || output.amount !== 0n) return null
+
+    const script = btc.Script.decode(output.script)
+    if (!Array.isArray(script) || script.length < 2 || script[0] !== 'RETURN') return null
+
+    const payload = script[1]
+    if (!(payload instanceof Uint8Array)) return null
+
+    return payload
+  } catch {
+    return null
+  }
+}
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -38,7 +58,15 @@ export async function launchpadMintController(c) {
   })
   if (!mintLimit.success) return json({ error: 'Rate limit exceeded' }, 429)
 
-  parseSignedPsbt(signedPsbt)
+  const tx = parseSignedPsbt(signedPsbt)
+
+  if (collection.policy.op_return) {
+    const payload = getOpReturnPayloadBytes(tx)
+
+    if (!payload || payload.length < OP_RETURN_MIN_BYTES) {
+      return json({ error: `Invalid OP_RETURN payload` }, 400)
+    }
+  }
 
   const id = c.env.LAUNCHPAD_RESERVATIONS.idFromName(slug)
   const durableObject = c.env.LAUNCHPAD_RESERVATIONS.get(id)

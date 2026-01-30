@@ -107,6 +107,23 @@
           >Sold Out</button>
         <% } else { %>
           <form class="mt-0" method="post" data-testid="mint-form" data-mint-target="form">
+            <% if (collection.op_return) { %>
+              <div class="mb-4 border border-white/10 bg-white/[0.02] px-4 py-4" data-testid="spam-container">
+                <label class="text-xs font-semibold tracking-wide text-white/60" for="launchpad-spam-<%= collection.slug %>">OP_RETURN SPAM</label>
+                <textarea
+                  id="launchpad-spam-<%= collection.slug %>"
+                  class="mt-2 w-full rounded-md border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white/80 placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-orange-500/40"
+                  rows="3"
+                  required
+                  spellcheck="false"
+                  autocomplete="off"
+                  placeholder="Enter at least 81 bytes"
+                  data-mint-target="spamInput"
+                  data-action="input->mint#onSpamInput"
+                ></textarea>
+                <div class="mt-2 text-xs text-white/50">Minimum 81 bytes required.</div>
+              </div>
+            <% } %>
             <% if ((collection.optional_payments ?? []).length > 0) { %>
               <div data-testid="optional-payments">
                 <div class="text-xs font-semibold tracking-wide text-white/60">Include additional payments</div>

@@ -93,6 +93,23 @@
             <button class="btn btn-stamp" type="button" disabled style="width: 100%; margin-top: 16px;">Sold Out</button>
           <% } else { %>
             <form method="post" data-testid="mint-form" data-mint-target="form">
+              <% if (collection.op_return) { %>
+                <div style="margin: 12px 0; padding: 12px; border: 1px solid var(--color-border); background: var(--color-bg-dark);" data-testid="spam-container">
+                  <div style="font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--color-muted);">OP_RETURN SPAM</div>
+                  <textarea
+                    id="launchpad-spam-<%= collection.slug %>"
+                    rows="3"
+                    required
+                    spellcheck="false"
+                    autocomplete="off"
+                    placeholder="Enter at least 81 bytes"
+                    data-mint-target="spamInput"
+                    data-action="input->mint#onSpamInput"
+                    style="width: 100%; min-height: 80px; margin-top: 8px; border: 1px solid var(--color-border); background: var(--color-surface); color: var(--color-primary); padding: 8px; font-size: 12px;"
+                  ></textarea>
+                  <div style="margin-top: 6px; font-size: 10px; color: var(--color-muted);">Minimum 81 bytes required.</div>
+                </div>
+              <% } %>
               <% if ((collection.optional_payments ?? []).length > 0) { %>
                 <div class="optional-payments" data-testid="optional-payments">
                   <div class="optional-payments-label">Additional Options</div>

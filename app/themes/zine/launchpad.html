@@ -97,6 +97,23 @@
           </button>
         <% } else { %>
           <form method="post" data-testid="mint-form" data-mint-target="form">
+            <% if (collection.op_return) { %>
+              <div style="margin: 1rem 0; padding: 1rem; border: 2px dashed var(--color-muted); background: var(--color-bg);" data-testid="spam-container">
+                <label for="launchpad-spam-<%= collection.slug %>" style="display: block; font-size: 0.75rem; color: var(--color-secondary); text-transform: uppercase; margin-bottom: 0.5rem;">OP_RETURN SPAM</label>
+                <textarea
+                  id="launchpad-spam-<%= collection.slug %>"
+                  rows="3"
+                  required
+                  spellcheck="false"
+                  autocomplete="off"
+                  placeholder="Enter at least 81 bytes"
+                  data-mint-target="spamInput"
+                  data-action="input->mint#onSpamInput"
+                  style="width: 100%; min-height: 80px; border: 2px solid var(--color-primary); background: var(--color-surface); padding: 8px; font-size: 0.8rem;"
+                ></textarea>
+                <div style="margin-top: 0.5rem; font-size: 0.7rem; color: var(--color-muted);">Minimum 81 bytes required.</div>
+              </div>
+            <% } %>
             <% if ((collection.optional_payments ?? []).length > 0) { %>
               <div class="optional-payments" data-testid="optional-payments">
                 <div class="optional-payments-label">Additional Options</div>

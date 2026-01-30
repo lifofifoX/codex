@@ -135,6 +135,23 @@
                   <div class="purchase-price" data-testid="price-sats"><%= formatSats(collection.price_sats) %></div>
 
                   <form method="post" data-testid="mint-form" data-mint-target="form">
+                    <% if (collection.op_return) { %>
+                      <div style="margin: 12px 0; padding: 12px; border: 2px solid var(--color-border); background: var(--color-surface);" data-testid="spam-container">
+                        <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--color-secondary); margin-bottom: 6px;">OP_RETURN SPAM</div>
+                        <textarea
+                          id="launchpad-spam-<%= collection.slug %>"
+                          rows="3"
+                          required
+                          spellcheck="false"
+                          autocomplete="off"
+                          placeholder="Enter at least 81 bytes"
+                          data-mint-target="spamInput"
+                          data-action="input->mint#onSpamInput"
+                          style="width: 100%; min-height: 80px; border: 2px solid var(--color-border); background: rgba(0,0,0,0.3); color: var(--color-primary); padding: 8px; font-size: 0.85rem;"
+                        ></textarea>
+                        <div style="margin-top: 6px; font-size: 0.7rem; color: var(--color-muted);">Minimum 81 bytes required.</div>
+                      </div>
+                    <% } %>
                     <% if ((collection.optional_payments ?? []).length > 0) { %>
                       <div class="optional-payments" data-testid="optional-payments">
                         <div class="optional-payments-label">Additional Options</div>

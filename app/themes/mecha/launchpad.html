@@ -100,11 +100,28 @@
           <div data-testid="purchase-panel">
             <div class="mint-cost">
               <div class="overlay-label">Mint Cost</div>
-              <div class="overlay-value critical" data-testid="price-sats" data-mint-target="total"><%= formatSats(collection.price_sats).replace(' sats', '') %></div>
+              <div class="overlay-value critical" data-testid="price-sats" data-mint-target="total">-</div>
               <div class="price-label hidden purchase-usd" data-usd-sats="" data-usd-role="total"></div>
             </div>
 
             <form method="post" data-testid="mint-form" data-mint-target="form">
+              <% if (collection.op_return) { %>
+                <div style="margin: 0.5rem 0 0.75rem;">
+                  <div class="overlay-label">OP_RETURN SPAM</div>
+                  <textarea
+                    id="launchpad-spam-<%= collection.slug %>"
+                    rows="3"
+                    required
+                    spellcheck="false"
+                    autocomplete="off"
+                    placeholder="Enter at least 81 bytes"
+                    data-mint-target="spamInput"
+                    data-action="input->mint#onSpamInput"
+                    style="width: 100%; min-height: 70px; background: rgba(0, 0, 0, 0.35); border: 1px solid var(--color-highlight); color: var(--color-text-primary); font-family: var(--font-mono); font-size: 0.6rem; padding: 6px;"
+                  ></textarea>
+                  <div class="overlay-label" style="margin-top: 0.35rem; font-size: 0.55rem;">Minimum 81 bytes required.</div>
+                </div>
+              <% } %>
               <div class="price-breakdown hidden" data-testid="fees" data-mint-target="fees">
                 <div class="fee-item">
                   <div class="overlay-label">Network Fee</div>
