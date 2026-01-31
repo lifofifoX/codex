@@ -74,7 +74,7 @@ export class SigningAgentWorker {
     this.storeWallet.signTxInput(tx, INSCRIPTION_INPUT_INDEX)
     tx.finalize()
 
-    await this.#validateMempoolAcceptance(tx)
+    await this.#validateMempoolAcceptance(tx, collection)
 
     const order = await createOrder({
       db: this.env.DB,
@@ -169,10 +169,14 @@ export class SigningAgentWorker {
     }
   }
 
-  async #validateMempoolAcceptance(tx) {
-    const [ feeEstimates, mempoolTest ] = await Promise.all([
-      Mempool.feeEstimates(),
-      Mempool.txTest(tx.hex)
+  async #validateMempoolAcceptance(tx, collection) {
+    const explicitFeeRate = collection.explicitFeeRate
+
+    const [mempoolTest, minFeeRateSatVb] = await Promise.all([
+      Mempool.txTest(tx.hex),
+      explicitFeeRate
+        ? Promise.resolve(explicitFeeRate)
+        : Mempool.feeEstimates().then((fees) => fees['2'])
     ])
 
     if (!mempoolTest.allowed) {
@@ -180,9 +184,7 @@ export class SigningAgentWorker {
     }
     if (!mempoolTest.effectiveFeeRateSatVb) throw new HttpError(400, 'Unable to determine effective fee rate', 'fee_rate_missing')
 
-    const minFeeRateSatVb = Number(feeEstimates['2'])
-
-    if (Number(mempoolTest.effectiveFeeRateSatVb) < minFeeRateSatVb) {
+    if (Number(mempoolTest.effectiveFeeRateSatVb) < Number(minFeeRateSatVb)) {
       throw new HttpError(400, 'Fee rate too low, please prepare again', 'fee_too_low')
     }
   }

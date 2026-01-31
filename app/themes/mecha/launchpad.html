@@ -8,6 +8,9 @@
     data-mint-payment-address-value="<%= collection.payment_address %>"
     data-mint-lowest-inscription-utxo-size-value="<%= collection.lowest_inscription_utxo_size %>"
     data-mint-seller-address-value="<%= launchpad.seller_address %>"
+    <% if (collection.explicit_fee_rate) { %>
+      data-mint-explicit-fee-rate-value="<%= collection.explicit_fee_rate %>"
+    <% } %>
   <% } %>
 >
   <% const isGallery = Boolean(collection.gallery_inscription_id) %>

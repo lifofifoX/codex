@@ -35,7 +35,7 @@ export default class extends Controller {
     'errorTitle',
     'errorMessage'
   ]
-  static values = { collection: String, price: Number, paymentAddress: String, lowestInscriptionUtxoSize: Number, sellerAddress: String }
+  static values = { collection: String, price: Number, paymentAddress: String, lowestInscriptionUtxoSize: Number, sellerAddress: String, explicitFeeRate: Number }
 
   #utxos = []
   #mempoolFees = []
@@ -361,6 +361,10 @@ export default class extends Controller {
   }
 
   get #networkFeeRate() {
+    if (this.hasExplicitFeeRateValue) {
+      return (Number(this.explicitFeeRateValue) + 0.01).toFixed(2)
+    }
+
     const raw = parseFloat(this.#mempoolFees["1"])
     const feeRate = (Math.floor(raw * 10) + 1) / 10
 

@@ -49,6 +49,10 @@ export class Collection {
     return this.#isLaunchpad
   }
 
+  get explicitFeeRate() {
+    return this.policy.explicit_fee_rate ?? null
+  }
+
   async soldCount({ db }) {
     return await countSoldByCollection({ db, collectionSlug: this.slug })
   }
